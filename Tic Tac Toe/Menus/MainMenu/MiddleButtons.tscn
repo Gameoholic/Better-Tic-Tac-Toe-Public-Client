@@ -1,0 +1,132 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Assets/menu_button_orange_pressed.png" type="Texture" id=1]
+[ext_resource path="res://Assets/menu_button_orange_unpressed.png" type="Texture" id=2]
+[ext_resource path="res://Assets/menu_button_yellow_unpressed.png" type="Texture" id=3]
+[ext_resource path="res://Assets/menu_button_purple_unpressed.png" type="Texture" id=4]
+[ext_resource path="res://Assets/menu_button_purple_pressed.png" type="Texture" id=5]
+[ext_resource path="res://Assets/menu_button_yellow_pressed.png" type="Texture" id=6]
+[ext_resource path="res://Assets/GUI/Comfortaa-Bold.ttf" type="DynamicFontData" id=7]
+
+[sub_resource type="DynamicFont" id=1]
+size = 40
+outline_size = 3
+use_filter = true
+font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 28
+outline_size = 2
+use_filter = true
+font_data = ExtResource( 7 )
+
+[node name="VBoxContainer" type="VBoxContainer"]
+margin_right = 518.0
+margin_bottom = 336.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Modes" type="TextureButton" parent="."]
+margin_left = 134.0
+margin_right = 384.0
+margin_bottom = 166.0
+rect_min_size = Vector2( 250, 166 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 5 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Modes"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 3.37
+margin_right = 3.37
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "MODES"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_top = 170.0
+margin_right = 518.0
+margin_bottom = 336.0
+
+[node name="Play" type="TextureButton" parent="HBoxContainer"]
+margin_right = 250.0
+margin_bottom = 166.0
+rect_min_size = Vector2( 250, 166 )
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 1 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HBoxContainer/Play"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "PLAY"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SelectedMode" type="Label" parent="HBoxContainer/Play"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 38.0
+margin_bottom = 38.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "Classic"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+margin_left = 254.0
+margin_right = 264.0
+margin_bottom = 166.0
+custom_constants/margin_right = 5
+custom_constants/margin_left = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Custom" type="TextureButton" parent="HBoxContainer"]
+margin_left = 268.0
+margin_right = 518.0
+margin_bottom = 166.0
+rect_min_size = Vector2( 250, 166 )
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 6 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HBoxContainer/Custom"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "CUSTOM"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
