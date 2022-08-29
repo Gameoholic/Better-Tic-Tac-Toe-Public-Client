@@ -8,11 +8,16 @@ var gameserver_port: int
 
 func _ready() -> void:
 	#Check if required files exist, if not, create them:
-	var data_file := File.new()
 	var contents := {"version": version}
+	
+	var directory = Directory.new()
+	if (!directory.dir_exists("user//Data")):
+		directory.make_dir("user://Data")
+	
+	var data_file := File.new()
 	if (!data_file.file_exists("user://Data/data.json")):
 		data_file.open("user://Data/data.json", File.WRITE)
-		contents.connection_ip = "127.0.0.1"
+		contents.connection_ip = "157.90.151.85"
 		contents.connection_port = "1911"
 		data_file.store_line(JSON.print(contents, "\t"))
 		data_file.close()
