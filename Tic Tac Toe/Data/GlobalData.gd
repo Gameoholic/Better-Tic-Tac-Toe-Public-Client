@@ -34,8 +34,8 @@ func _ready() -> void:
 	data_file.open("user://Data/data.json", File.READ)
 	var file_json := JSON.parse(data_file.get_as_text())
 	#version is viewonly, shouldn't be changed.
-#	connection_ip = file_json.result.connection_ip
-	connection_ip = "127.0.0.1"
+	connection_ip = file_json.result.connection_ip
+#	connection_ip = "127.0.0.1"
 	connection_port = int(file_json.result.connection_port)
 	data_file.close()
 	
