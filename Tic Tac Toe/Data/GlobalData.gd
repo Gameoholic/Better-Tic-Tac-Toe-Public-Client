@@ -5,6 +5,7 @@ var connection_ip: String
 var connection_port: int
 var displayname: String
 var gameserver_port: int
+var inappropriate_words: Array
 
 func _ready() -> void:
 	#Check if required files exist, if not, create them:
@@ -33,6 +34,14 @@ func _ready() -> void:
 	data_file.open("user://Data/data.json", File.READ)
 	var file_json := JSON.parse(data_file.get_as_text())
 	#version is viewonly, shouldn't be changed.
-	connection_ip = file_json.result.connection_ip
+#	connection_ip = file_json.result.connection_ip
+	connection_ip = "127.0.0.1"
 	connection_port = int(file_json.result.connection_port)
 	data_file.close()
+	
+	#Read inappropriate words file:
+	var inappropriate_words_file := File.new()
+	inappropriate_words_file.open("res://Data/inappropriate_words.txt", File.READ)
+	while (!inappropriate_words_file.eof_reached()):
+		inappropriate_words.append(inappropriate_words_file.get_line())
+	inappropriate_words_file.close()

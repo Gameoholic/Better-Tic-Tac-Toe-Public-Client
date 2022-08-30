@@ -41,9 +41,11 @@ func confirm_connection() -> void:
 	rpc_id(1, "confirm_connection")
 
 remote func send_game_data(data: Dictionary) -> void:
+	Logger.log("Sending game data to server: " + str(data))
 	rpc_id(1, "receive_game_data", data)
 	
 remote func receive_game_data(data: Dictionary) -> void:
+	Logger.log("Received game server: " + str(data))
 	if (data.has("server_mark")):
 		set_mark(data["server_mark"])
 	if (data.has("server_turn")):

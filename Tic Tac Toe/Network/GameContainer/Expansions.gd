@@ -188,6 +188,6 @@ func preview_expansion() -> void:
 		TilesPreview_.clear()
 		TilesPreview_.set_cell(Game_.origin_expansion_cell.x, Game_.origin_expansion_cell.y, Expansion)
 		for possible_expansion_pos in Game_.possible_expansions[direction]:
-			var tile_pos = Vector2(possible_expansion_pos.x, possible_expansion_pos.y)
+			var tile_pos := Vector2(possible_expansion_pos.x, possible_expansion_pos.y)
 			TilesPreview_.set_cell(tile_pos.x, tile_pos.y, Empty)
 	

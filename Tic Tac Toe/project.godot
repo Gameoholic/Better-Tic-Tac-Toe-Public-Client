@@ -26,8 +26,10 @@ config/icon="res://icon.png"
 
 [autoload]
 
+Global="*res://Globals/Global.gd"
 GlobalData="*res://Data/GlobalData.gd"
 Network="*res://Network/Network.tscn"
+Logger="*res://Globals/Logger.gd"
 
 [display]
 

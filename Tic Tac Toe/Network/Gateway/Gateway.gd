@@ -1,5 +1,7 @@
 extends Node
 
+enum {Notice, Warning, Alert, Error} #Severities
+
 onready var GameServer_ := $"/root/Network/GameServer"
 onready var LoginScreen_ := get_node("/root/LoginScreen")
 
@@ -45,17 +47,17 @@ func connect_to_server(local_username: String, local_password: String, local_new
 	network.connect("connection_succeeded", self, "_on_connection_succeeded")
 	
 func _on_connection_failed() -> void:
-	print("Failed to connect to login server")
+	Logger.error("Failed to connect to gateway server.", Error)
 	 
 func _on_connection_succeeded() -> void:
-	print("Succesfully connected to login server")
+	Logger.log("Successfully connected to gateway server.")
 	if new_account == true:
 		request_create_account()
 	else:
 		request_login()
 		
 func request_login() -> void:
-	print("Connecting to gateway to request login...")
+	Logger.log("Connecting to gateway to request login.")
 	if (login_type == "password"):
 		rpc_id(1, "login_request", username, password.sha256_text(), remember_account_details, login_type)
 	elif (login_type == "auth_token"):
@@ -63,35 +65,39 @@ func request_login() -> void:
 	password = ""
 	
 func request_create_account() -> void:
-	print("Creating new account")
+	Logger.log("Creating new account.")
 	rpc_id(1, "create_account_request", username, password.sha256_text())
 	password = ""
 	
 remote func receive_create_account_result(result: bool, error_code: String) -> void:
-	print("Results received for account creation")
+	Logger.log("Results received for account creation")
 	if result == true:
+		Logger.log("Account created successfully.")
 		LoginScreen_.error_text.text = "Account created. You may now log in."
 	else:
 		match error_code:
 			"G001":
-				print("Couldn't create an account, please enter a username and a password.")
+				Logger.error("Couldn't create an account, no username/password.", Notice)
 				LoginScreen_.error_text.text = "Couldn't create an account, please enter a username and a password."
 			"A001":
-				print("Couldn't create an account, the username already exists.")
+				Logger.error("Couldn't create an account, the username already exists.", Notice)
 				LoginScreen_.error_text.text = "Couldn't create an account, the username already exists."
+			"A003":
+				Logger.error("Couldn't create an account, account details aren't valid. Possible outdated version.", Notice)
+				LoginScreen_.error_text.text = "Couldn't create an account, account details aren't valid. Make sure you're running the most updated version."
 			_:
-				print("Couldn't create an account, please try again. (" + error_code + ")")
+				Logger.error("Couldn't create an account, please try again. (" + error_code + ")", Alert)
 				LoginScreen_.error_text.text = "Couldn't create an account, please try again. (" + error_code + ")"
 				
 	get_node("/root/LoginScreen").enable_buttons()
 	LoginScreen_.get_node("Tint").visible = false
 	LoginScreen_.get_node("BufferText").visible = false
-	LoginScreen_.error_text.visible = true
 	network.disconnect("connection_failed", self, "_on_connection_failed")
 	network.disconnect("connection_succeeded", self, "_on_connection_succeeded")
 
 #Contains details on how to connect to gameserver. {"port": ..., "token":...}	
 remote func receive_gameserver_connection_details(result: bool, gameserver_connection_details: Dictionary) -> void:
+	Logger.log("Received gameserver connection details: " + str(result) + ", " + str(gameserver_connection_details))
 	if (result == true):
 		GlobalData.displayname = username #IN FUTURE, CHANGE THIS TO DISPLAYNAME. NOT USERNAME AAAAAAAAAAAAAAAAAAAAAIN FUTURE, CHANGE THIS TO DISPLAYNAME. NOT USERNAME AAAAAAAAAAAAAAAAAAAAAIN FUTURE, CHANGE THIS TO DISPLAYNAME. NOT USERNAME AAAAAAAAAAAAAAAAAAAAA
 		GlobalData.gameserver_port = gameserver_connection_details.port
@@ -107,7 +113,7 @@ remote func receive_gameserver_connection_details(result: bool, gameserver_conne
 			auth_token_file.close()
 		GameServer_.connect_to_server()
 	else:
-		print("Incorrect credentials provided.")
+		Logger.error("Failed to log in. Incorrect credentials provided.", Notice)
 		LoginScreen_.enable_buttons()
 		LoginScreen_.get_node("Tint").visible = false
 		LoginScreen_.get_node("BufferText").visible = false
@@ -120,6 +126,6 @@ remote func receive_gameserver_connection_details(result: bool, gameserver_conne
 remote func receive_error(error_code: String) -> void:
 	match error_code:
 		"M001":
-			print("Couldn't connect to server, please try again. (" + error_code + ")")
+			Logger.error("Couldn't connect to server, please try again. (" + error_code + ")", Error)
 		_:
-			print("An error has occured: " + str(error_code))
+			Logger.error("An error has occured: " + str(error_code), Error)
