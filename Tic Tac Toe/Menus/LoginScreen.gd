@@ -11,20 +11,14 @@ onready var error_text := get_node("Background/UIContainer/ErrorText")
 	
 func _ready() -> void:
 	#Check if there's an auth token on the device:
-	var auth_token_file := File.new()
-	auth_token_file.open("user://Data/login_data.json", File.READ)
-	var file_json := JSON.parse(auth_token_file.get_as_text())
-	var auth_token: String = file_json.result.auth_token
-	var username: String = file_json.result.username
-	auth_token_file.close()
-	if (auth_token != ""):
+	if (GlobalData.auth_token != ""):
 		Logger.log("Logging in with auth token.")
 		disable_buttons()
 		$Tint.visible = true
-		$BufferText.text = "Logging in as " + username + "..."
+		$BufferText.text = "Logging in as " + GlobalData.username + "..."
 		$BufferText.visible = true
-		username_input.text = username
-		Gateway_.connect_to_server(username, auth_token, false, false, "auth_token")
+		username_input.text = GlobalData.username
+		Gateway_.connect_to_server(GlobalData.username, GlobalData.auth_token, false, false, "auth_token")
 	
 func _on_LoginButton_pressed() -> void:
 	if (' ' in username_input.text || ' ' in password_input.text):
