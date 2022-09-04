@@ -17,7 +17,7 @@ onready var mode_description: Panel = $"PlayMenu/MiddleButtons/ModesContainer/Mo
 
 var mode_buttons_shown := false
 var looking_for_game := false
-var game_mode := "classic"
+var game_mode: String
 
 func _ready() -> void:
 	$"PlayMenu/VBoxContainer/Version".text = "v" + GlobalData.version
@@ -34,6 +34,7 @@ func _ready() -> void:
 	#-
 	match GlobalData.game_mode_pref:
 		"classic":
+			game_mode = "classic"
 			bullet_button.set_texture("normal", load("res://Assets/menu_button_gray_unpressed.png"))
 			bullet_button.set_texture("pressed", load("res://Assets/menu_button_gray_pressed.png"))
 			classic_button.set_texture("normal", load("res://Assets/menu_button_orange_unpressed.png"))
@@ -41,6 +42,7 @@ func _ready() -> void:
 			blitz_button.set_texture("normal", load("res://Assets/menu_button_gray_unpressed.png"))
 			blitz_button.set_texture("pressed", load("res://Assets/menu_button_gray_pressed.png"))
 		"blitz":
+			game_mode = "blitz"
 			play_button.get_node("SelectedMode").text = "Blitz"
 			bullet_button.set_texture("normal", load("res://Assets/menu_button_gray_unpressed.png"))
 			bullet_button.set_texture("pressed", load("res://Assets/menu_button_gray_pressed.png"))
@@ -49,6 +51,7 @@ func _ready() -> void:
 			blitz_button.set_texture("normal", load("res://Assets/menu_button_orange_unpressed.png"))
 			blitz_button.set_texture("pressed", load("res://Assets/menu_button_orange_pressed.png"))
 		"bullet":
+			game_mode = "bullet"
 			bullet_button.set_texture("normal", load("res://Assets/menu_button_orange_unpressed.png"))
 			bullet_button.set_texture("pressed", load("res://Assets/menu_button_orange_pressed.png"))
 			classic_button.set_texture("normal", load("res://Assets/menu_button_gray_unpressed.png"))
