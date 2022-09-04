@@ -1,14 +1,18 @@
 extends Node
 
-var version := "0.1.2"
-var connection_ip := "157.90.151.85" #127.0.0.1
-var connection_port := 1911
+const version := "0.2.0"
+var latest_version := "" #Will be "" unless there's a newer version available
+const connection_ip := "157.90.151.85"
+#const connection_ip := "127.0.0.1"
+const connection_port := 1911
 var displayname: String
 var gameserver_port: int
 var inappropriate_words: Array
 #LoginScreen.gd authentication:
 var username: String
 var auth_token: String
+#Preferences:
+var game_mode_pref: String
 
 func _ready() -> void:
 	#Check if required files exist, if not, create them:
@@ -34,6 +38,8 @@ func _ready() -> void:
 	#Create arguments with default parameters if they don't exist:
 	if (!data_file_contents.has("f11")):
 		data_file_contents["f11"] = false
+	if (!data_file_contents.has("mode")):
+		data_file_contents["mode"] = "classic"
 	#Remove old, unneeded arguments created by old versions:
 	data_file_contents.erase("version")
 	data_file_contents.erase("connection_ip")
@@ -70,6 +76,7 @@ func _ready() -> void:
 	data_file.open("user://Data/data.json", File.READ)
 	data_file_contents = JSON.parse(data_file.get_as_text()).result
 	OS.window_fullscreen = data_file_contents["f11"]
+	game_mode_pref = data_file_contents["mode"]
 	data_file.close()
 	
 	#Login data file:

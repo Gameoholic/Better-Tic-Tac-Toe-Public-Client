@@ -11,6 +11,7 @@ func _on_Button_pressed() -> void:
 	Game_.emit_signal("button_clicked")
 
 func _on_GoBackButton_pressed() -> void:
+	CustomButtons.enable()
 	get_tree().change_scene("res://Menus/MainMenu/MainMenu.tscn")
 
 func _on_CloseButton_pressed() -> void:

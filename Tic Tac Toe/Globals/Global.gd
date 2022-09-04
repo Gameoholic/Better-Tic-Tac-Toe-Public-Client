@@ -10,10 +10,14 @@ func _unhandled_input(event):
 			var is_fullscreen: bool = OS.window_fullscreen
 			OS.window_fullscreen = !is_fullscreen
 			#Update data.json with F11 preference
-			var data_file := File.new()
-			data_file.open("user://Data/data.json", File.READ_WRITE)
-			var data_file_contents: Dictionary = JSON.parse(data_file.get_as_text()).result
-			data_file_contents.f11 = !is_fullscreen
-			data_file.store_line(JSON.print(data_file_contents, "\t"))
-			data_file.close()
+			update_data_file("f11", !is_fullscreen)
 
+func update_data_file(key: String, value) -> void:
+	var data_file := File.new()
+	data_file.open("user://Data/data.json", File.READ)
+	var data_file_contents: Dictionary = JSON.parse(data_file.get_as_text()).result
+	data_file_contents[key] = value
+	data_file.close()
+	data_file.open("user://Data/data.json", File.WRITE)
+	data_file.store_line(JSON.print(data_file_contents, "\t"))
+	data_file.close()

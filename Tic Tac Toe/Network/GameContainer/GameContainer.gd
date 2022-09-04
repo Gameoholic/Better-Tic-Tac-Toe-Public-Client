@@ -45,7 +45,7 @@ remote func send_game_data(data: Dictionary) -> void:
 	rpc_id(1, "receive_game_data", data)
 	
 remote func receive_game_data(data: Dictionary) -> void:
-	Logger.log("Received game server: " + str(data))
+	Logger.log("Received game data from server: " + str(data))
 	if (data.has("server_mark")):
 		set_mark(data["server_mark"])
 	if (data.has("server_turn")):

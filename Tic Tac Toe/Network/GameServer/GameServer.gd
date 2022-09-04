@@ -20,7 +20,7 @@ func connect_to_server() -> void:
 	network.connect("connection_succeeded", self, "_on_connection_succeeded")
 	
 func _on_connection_failed() -> void:
-	Logger.error("Failed to connect to gameserver.", Logger.Error)
+	Logger.error("Failed to connect to gameserver.", Logger.ERROR)
 	get_node("/root/LoginScreen").enable_buttons()
 	 
 func _on_connection_succeeded() -> void:
@@ -35,14 +35,23 @@ remote func return_player_stats(stats) -> void:
 #Send token to gameserver
 remote func send_token() -> void:
 	Logger.log("Sending token to gameserver.")
-	rpc_id(1, "receive_token", token)
+	rpc_id(1, "receive_token", token, GlobalData.version)
 	
-remote func return_token_verification_results(result: bool) -> void:
-	if result == true:
+remote func receive_token_verification_results(result: bool, required_version: String, latest_version: String) -> void:
+	if (result == true):
 		Logger.log("Successful token verification, logged into gameserver.")
+		if (latest_version != GlobalData.version):
+			Logger.error("Running on outdated version " + GlobalData.version + ", latest version is " + latest_version + ".", Logger.WARNING)
+			GlobalData.latest_version = latest_version
+		else:
+			Logger.log("Running on latest version " + GlobalData.version + ".")
 		LoginScreen_.on_successful_connection_to_server()
 	else:
-		Logger.error("Token verification failed. Logged out of gameserver.", Logger.Error)
+		if (required_version == ""):
+			Logger.error("Token verification failed. Logged out of gameserver.", Logger.ERROR)
+		else:
+			Logger.error("New update available. Must run on version " + required_version + ", latest version is " + latest_version + ". Currently running on " + GlobalData.version + ".", Logger.ERROR)
+			LoginScreen_.error_text.text = "New update available, please install v" + latest_version + " from the #releases channel."
 		LoginScreen_.enable_buttons()
 
 remote func queue_for_game(game_type: String) -> void:
@@ -74,5 +83,6 @@ remote func connect_to_game(game_id: String, player_displaynames: Array) -> void
 	Logger.log("Connected to game " + str(game_id))
 	game_container.confirm_connection()
 	#Switch to game scene:
+	CustomButtons.disable()
 	get_tree().change_scene("res://Game/Game.tscn")
 	

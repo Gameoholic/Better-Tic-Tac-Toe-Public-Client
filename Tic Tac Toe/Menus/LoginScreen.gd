@@ -72,6 +72,8 @@ func _on_CreateAccountButton_pressed() -> void:
 func enable_buttons() -> void:
 	login_button.disabled = false
 	create_account_button.disabled = false
+	$BufferText.visible = false
+	$Tint.visible = false
 
 func disable_buttons() -> void:
 	login_button.disabled = true

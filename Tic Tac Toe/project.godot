@@ -9,12 +9,18 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "TextureButton",
+"class": "CustomButton",
+"language": "GDScript",
+"path": "res://Classes/CustomButton.gd"
+}, {
 "base": "Node",
 "class": "Tile",
 "language": "GDScript",
 "path": "res://Classes/Tile.gd"
 } ]
 _global_script_class_icons={
+"CustomButton": "",
 "Tile": ""
 }
 
@@ -30,6 +36,7 @@ Global="*res://Globals/Global.gd"
 GlobalData="*res://Data/GlobalData.gd"
 Network="*res://Network/Network.tscn"
 Logger="*res://Globals/Logger.gd"
+CustomButtons="*res://Globals/CustomButtons.gd"
 
 [display]
 

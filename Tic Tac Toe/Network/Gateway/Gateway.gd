@@ -1,7 +1,5 @@
 extends Node
 
-enum {Notice, Warning, Alert, Error} #Severities
-
 onready var GameServer_ := $"/root/Network/GameServer"
 onready var LoginScreen_ := get_node("/root/LoginScreen")
 
@@ -47,7 +45,7 @@ func connect_to_server(local_username: String, local_password: String, local_new
 	network.connect("connection_succeeded", self, "_on_connection_succeeded")
 	
 func _on_connection_failed() -> void:
-	Logger.error("Failed to connect to gateway server.", Error)
+	Logger.error("Failed to connect to gateway server.", Logger.ERROR)
 	 
 func _on_connection_succeeded() -> void:
 	Logger.log("Successfully connected to gateway server.")
@@ -77,16 +75,16 @@ remote func receive_create_account_result(result: bool, error_code: String) -> v
 	else:
 		match error_code:
 			"G001":
-				Logger.error("Couldn't create an account, no username/password.", Notice)
+				Logger.error("Couldn't create an account, no username/password.", Logger.NOTICE)
 				LoginScreen_.error_text.text = "Couldn't create an account, please enter a username and a password."
 			"A001":
-				Logger.error("Couldn't create an account, the username already exists.", Notice)
+				Logger.error("Couldn't create an account, the username already exists.", Logger.NOTICE)
 				LoginScreen_.error_text.text = "Couldn't create an account, the username already exists."
 			"A003":
-				Logger.error("Couldn't create an account, account details aren't valid. Possible outdated version.", Notice)
+				Logger.error("Couldn't create an account, account details aren't valid. Possible outdated version.", Logger.NOTICE)
 				LoginScreen_.error_text.text = "Couldn't create an account, account details aren't valid. Make sure you're running the most updated version."
 			_:
-				Logger.error("Couldn't create an account, please try again. (" + error_code + ")", Alert)
+				Logger.error("Couldn't create an account, please try again. (" + error_code + ")", Logger.ALERT)
 				LoginScreen_.error_text.text = "Couldn't create an account, please try again. (" + error_code + ")"
 				
 	get_node("/root/LoginScreen").enable_buttons()
@@ -113,12 +111,11 @@ remote func receive_gameserver_connection_details(result: bool, gameserver_conne
 			auth_token_file.close()
 		GameServer_.connect_to_server()
 	else:
-		Logger.error("Failed to log in. Incorrect credentials provided.", Notice)
+		Logger.error("Failed to log in. Incorrect credentials provided.", Logger.NOTICE)
 		LoginScreen_.enable_buttons()
 		LoginScreen_.get_node("Tint").visible = false
 		LoginScreen_.get_node("BufferText").visible = false
 		LoginScreen_.error_text.text = "Incorrect credentials provided."
-		LoginScreen_.error_text.visible = true
 		
 	network.disconnect("connection_failed", self, "_on_connection_failed")
 	network.disconnect("connection_succeeded", self, "_on_connection_succeeded")
@@ -126,6 +123,6 @@ remote func receive_gameserver_connection_details(result: bool, gameserver_conne
 remote func receive_error(error_code: String) -> void:
 	match error_code:
 		"M001":
-			Logger.error("Couldn't connect to server, please try again. (" + error_code + ")", Error)
+			Logger.error("Couldn't connect to server, please try again. (" + error_code + ")", Logger.ERROR)
 		_:
-			Logger.error("An error has occured: " + str(error_code), Error)
+			Logger.error("An error has occured: " + str(error_code), Logger.ERROR)

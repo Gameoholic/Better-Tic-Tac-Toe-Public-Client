@@ -1,6 +1,6 @@
 extends Node
 
-enum {Notice, Warning, Alert, Error} #Severities
+enum {NOTICE, WARNING, ALERT, ERROR} #Severities
 
 var lines := []
 
@@ -45,13 +45,13 @@ func log(msg: String) -> void:
 func error(msg: String, severity: int) -> void:
 	var severity_string: String
 	match severity:
-		Notice: 
+		NOTICE: 
 			severity_string = "Notice"
-		Warning:
+		WARNING:
 			severity_string = "Warning"
-		Alert:
+		ALERT:
 			severity_string = "Alert"
-		Error:
+		ERROR:
 			severity_string = "Error"
 	var prefix := "[" + get_time_string() + "] " + severity_string + ": "
 	lines.append(prefix + msg)

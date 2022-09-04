@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Assets/light-gray-background-with-small-sparkles-texture-macro-focus-microtexture_328295-112.webp" type="Texture" id=1]
 [ext_resource path="res://Assets/menu_button_purple_unpressed.png" type="Texture" id=2]
@@ -9,8 +9,12 @@
 [ext_resource path="res://Assets/menu_button_yellow_unpressed.png" type="Texture" id=7]
 [ext_resource path="res://Assets/menu_button_orange_pressed.png" type="Texture" id=8]
 [ext_resource path="res://Assets/menu_button_orange_unpressed.png" type="Texture" id=9]
-[ext_resource path="res://Menus/MainMenu/MiddleButtons.gd" type="Script" id=10]
 [ext_resource path="res://Menus/MainMenu/MainMenu.gd" type="Script" id=11]
+[ext_resource path="res://Assets/menu_button_gray_unpressed.png" type="Texture" id=12]
+[ext_resource path="res://Assets/menu_button_gray_pressed.png" type="Texture" id=13]
+[ext_resource path="res://Assets/blitz.png" type="Texture" id=14]
+[ext_resource path="res://Assets/bullet.png" type="Texture" id=15]
+[ext_resource path="res://Classes/CustomButton.gd" type="Script" id=16]
 
 [sub_resource type="DynamicFont" id=1]
 size = 50
@@ -22,9 +26,20 @@ font_data = ExtResource( 3 )
 use_filter = true
 font_data = ExtResource( 3 )
 
+[sub_resource type="DynamicFont" id=7]
+size = 28
+outline_size = 2
+use_filter = true
+font_data = ExtResource( 3 )
+
 [sub_resource type="DynamicFont" id=5]
 size = 40
 outline_size = 3
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 14
 use_filter = true
 font_data = ExtResource( 3 )
 
@@ -88,6 +103,9 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 1 )
 text = "Player"
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Version" type="Label" parent="PlayMenu/VBoxContainer"]
 margin_top = 61.0
@@ -131,35 +149,195 @@ margin_top = -232.0
 margin_right = 155.0
 margin_bottom = 99.0
 rect_scale = Vector2( 1.4, 1.4 )
-script = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Modes" type="TextureButton" parent="PlayMenu/MiddleButtons"]
+[node name="ModesContainer" type="Control" parent="PlayMenu/MiddleButtons"]
 margin_left = 134.0
 margin_right = 384.0
 margin_bottom = 166.0
 rect_min_size = Vector2( 250, 166 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture_normal = ExtResource( 2 )
-texture_pressed = ExtResource( 5 )
-expand = true
+
+[node name="ModeButtons" type="Control" parent="PlayMenu/MiddleButtons/ModesContainer"]
+margin_left = -66.0
+margin_right = 452.0
+margin_bottom = 83.0
+rect_min_size = Vector2( 375, 83 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/Modes"]
+[node name="Blitz" type="TextureButton" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons"]
+margin_left = 129.0
+margin_right = 254.0
+margin_bottom = 83.0
+rect_min_size = Vector2( 125, 0 )
+texture_normal = ExtResource( 12 )
+texture_pressed = ExtResource( 13 )
+expand = true
+script = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 3.37
-margin_right = 3.37
+margin_left = 1.28573
+margin_top = -15.7143
+margin_right = 1.28572
+margin_bottom = -15.7143
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 7 )
+text = "Blitz"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Icon" type="TextureRect" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -21.88
+margin_top = -2.214
+margin_right = 103.12
+margin_bottom = 80.786
+rect_scale = Vector2( 0.35, 0.35 )
+texture = ExtResource( 14 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bullet" type="TextureButton" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons"]
+margin_left = 129.0
+margin_right = 254.0
+margin_bottom = 83.0
+rect_min_size = Vector2( 125, 0 )
+texture_normal = ExtResource( 12 )
+texture_pressed = ExtResource( 13 )
+expand = true
+script = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.28573
+margin_top = -15.7143
+margin_right = 1.28572
+margin_bottom = -15.7143
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 7 )
+text = "Bullet"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Icon" type="TextureRect" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -21.88
+margin_top = -2.214
+margin_right = 103.12
+margin_bottom = 80.786
+rect_scale = Vector2( 0.35, 0.35 )
+texture = ExtResource( 15 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Classic" type="TextureButton" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons"]
+margin_left = 129.0
+margin_right = 254.0
+margin_bottom = 83.0
+rect_min_size = Vector2( 125, 0 )
+texture_normal = ExtResource( 12 )
+texture_pressed = ExtResource( 13 )
+expand = true
+script = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+priority = 6
+
+[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 7 )
+text = "Classic"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Modes" type="TextureButton" parent="PlayMenu/MiddleButtons/ModesContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 250, 166 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 5 )
+expand = true
+script = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+priority = 10
+
+[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/ModesContainer/Modes"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 5 )
 text = "MODES"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ModeDescription" type="Panel" parent="PlayMenu/MiddleButtons/ModesContainer"]
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 42.17
+margin_top = -188.0
+margin_right = -41.23
+margin_bottom = -268.0
+rect_min_size = Vector2( 166.6, 86 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/ModesContainer/ModeDescription"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 8 )
+text = "3 minutes each
++2 seconds per turn
+(3|2)"
+align = 1
+valign = 1
+autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -176,9 +354,8 @@ rect_min_size = Vector2( 250, 166 )
 texture_normal = ExtResource( 9 )
 texture_pressed = ExtResource( 8 )
 expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource( 16 )
+priority = 10
 
 [node name="Label" type="Label" parent="PlayMenu/MiddleButtons/HBoxContainer/Play"]
 anchor_right = 1.0
@@ -224,13 +401,14 @@ rect_min_size = Vector2( 250, 166 )
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 6 )
 expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource( 16 )
+priority = 10
 
 [node name="Label" type="Label" parent="PlayMenu/MiddleButtons/HBoxContainer/Custom"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 4.00003
+margin_right = 4.00003
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 5 )
 text = "CUSTOM"
@@ -263,6 +441,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="NewVersionReminder" type="AcceptDialog" parent="PlayMenu"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -517.0
+margin_top = 201.0
+margin_right = -212.0
+margin_bottom = 276.0
+window_title = "New Version"
+dialog_text = "There's a new version available!
+Update to v0.0.0 in #releases when possible."
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="NinePatchRect" type="NinePatchRect" parent="CanvasLayer"]
@@ -277,12 +469,31 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="button_down" from="PlayMenu/MiddleButtons/Modes" to="PlayMenu/MiddleButtons" method="_on_Modes_button_down"]
-[connection signal="button_up" from="PlayMenu/MiddleButtons/Modes" to="PlayMenu/MiddleButtons" method="_on_Modes_button_up"]
-[connection signal="pressed" from="PlayMenu/MiddleButtons/Modes" to="PlayMenu/MiddleButtons" method="_on_Modes_pressed"]
-[connection signal="button_down" from="PlayMenu/MiddleButtons/HBoxContainer/Play" to="PlayMenu/MiddleButtons" method="_on_Play_button_down"]
-[connection signal="button_up" from="PlayMenu/MiddleButtons/HBoxContainer/Play" to="PlayMenu/MiddleButtons" method="_on_Play_button_up"]
-[connection signal="pressed" from="PlayMenu/MiddleButtons/HBoxContainer/Play" to="PlayMenu/MiddleButtons" method="_on_Play_pressed"]
-[connection signal="button_down" from="PlayMenu/MiddleButtons/HBoxContainer/Custom" to="PlayMenu/MiddleButtons" method="_on_Custom_button_down"]
-[connection signal="button_up" from="PlayMenu/MiddleButtons/HBoxContainer/Custom" to="PlayMenu/MiddleButtons" method="_on_Custom_button_up"]
-[connection signal="pressed" from="PlayMenu/MiddleButtons/HBoxContainer/Custom" to="PlayMenu/MiddleButtons" method="_on_Custom_pressed"]
+[node name="ModeDescriptionTween" type="Tween" parent="."]
+
+[node name="ModeButtonsTween" type="Tween" parent="."]
+
+[connection signal="button_left_area" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_button_left_area"]
+[connection signal="button_pressed" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_button_pressed"]
+[connection signal="button_released" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_button_released"]
+[connection signal="mouse_hover" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_mouse_hover"]
+[connection signal="mouse_stop_hover" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_mouse_stop_hover"]
+[connection signal="button_left_area" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_button_left_area"]
+[connection signal="button_pressed" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_button_pressed"]
+[connection signal="button_released" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_button_released"]
+[connection signal="mouse_hover" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_mouse_hover"]
+[connection signal="mouse_stop_hover" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_mouse_stop_hover"]
+[connection signal="button_left_area" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_button_left_area"]
+[connection signal="button_pressed" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_button_pressed"]
+[connection signal="button_released" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_button_released"]
+[connection signal="mouse_hover" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_mouse_hover"]
+[connection signal="mouse_stop_hover" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_mouse_stop_hover"]
+[connection signal="button_left_area" from="PlayMenu/MiddleButtons/ModesContainer/Modes" to="." method="_on_Modes_button_left_area"]
+[connection signal="button_pressed" from="PlayMenu/MiddleButtons/ModesContainer/Modes" to="." method="_on_Modes_button_pressed"]
+[connection signal="button_released" from="PlayMenu/MiddleButtons/ModesContainer/Modes" to="." method="_on_Modes_button_released"]
+[connection signal="button_left_area" from="PlayMenu/MiddleButtons/HBoxContainer/Play" to="." method="_on_Play_button_left_area"]
+[connection signal="button_pressed" from="PlayMenu/MiddleButtons/HBoxContainer/Play" to="." method="_on_Play_button_pressed"]
+[connection signal="button_released" from="PlayMenu/MiddleButtons/HBoxContainer/Play" to="." method="_on_Play_button_released"]
+[connection signal="button_left_area" from="PlayMenu/MiddleButtons/HBoxContainer/Custom" to="." method="_on_Custom_button_left_area"]
+[connection signal="button_pressed" from="PlayMenu/MiddleButtons/HBoxContainer/Custom" to="." method="_on_Custom_button_pressed"]
+[connection signal="button_released" from="PlayMenu/MiddleButtons/HBoxContainer/Custom" to="." method="_on_Custom_button_released"]
