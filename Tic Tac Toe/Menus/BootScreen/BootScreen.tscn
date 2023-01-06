@@ -1,0 +1,466 @@
+[gd_scene load_steps=23 format=2]
+
+[ext_resource path="res://Assets/Videos/LogoAnimation.ogv" type="VideoStream" id=1]
+[ext_resource path="res://Menus/BootScreen/BootScreen.gd" type="Script" id=2]
+[ext_resource path="res://Assets/GUI/Comfortaa-Bold.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Classes/CustomButton.gd" type="Script" id=4]
+[ext_resource path="res://Assets/menu_button_white_unpressed.png" type="Texture" id=5]
+[ext_resource path="res://Assets/menu_button_white_pressed.png" type="Texture" id=6]
+[ext_resource path="res://Assets/Videos/LogoAnimationFinish.ogv" type="VideoStream" id=7]
+[ext_resource path="res://Assets/Videos/LogoAnimationSplit.ogv" type="VideoStream" id=8]
+[ext_resource path="res://Menus/BootScreen/Username.gd" type="Script" id=9]
+[ext_resource path="res://Assets/Videos/LogoAnimationMerge.ogv" type="VideoStream" id=10]
+[ext_resource path="res://Assets/menu_button_gray_unpressed.png" type="Texture" id=11]
+[ext_resource path="res://Assets/menu_button_gray_pressed.png" type="Texture" id=12]
+[ext_resource path="res://Menus/BootScreen/Password.gd" type="Script" id=13]
+
+[sub_resource type="DynamicFont" id=2]
+size = 27
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 23
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=5]
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=7]
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=6]
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 18
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=8]
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=3]
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=1]
+use_filter = true
+font_data = ExtResource( 3 )
+
+[node name="BootScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 2 )
+
+[node name="VideoPlayer5" type="VideoPlayer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+stream = ExtResource( 7 )
+
+[node name="VideoPlayer4" type="VideoPlayer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+stream = ExtResource( 10 )
+
+[node name="VideoPlayer3" type="VideoPlayer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+stream = ExtResource( 8 )
+
+[node name="VideoPlayer2" type="VideoPlayer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+stream = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VideoPlayer" type="VideoPlayer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+stream = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LoadingInfo" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 125.0
+margin_bottom = 125.0
+rect_pivot_offset = Vector2( -951, 82 )
+mouse_filter = 2
+
+[node name="SplashText" type="Label" parent="LoadingInfo"]
+visible = false
+margin_left = 313.0
+margin_top = 507.0
+margin_right = 766.0
+margin_bottom = 572.0
+custom_fonts/font = SubResource( 2 )
+text = "Testtttttasdddddddddddddddd
+asdasdasd"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Retry" type="TextureButton" parent="LoadingInfo/SplashText"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -75.0
+margin_top = 34.5
+margin_right = 75.0
+margin_bottom = 94.5
+grow_horizontal = 0
+rect_min_size = Vector2( 150, 60 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 6 )
+expand = true
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="LoadingInfo/SplashText/Retry"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -75.0
+margin_top = -30.0
+margin_right = 75.0
+margin_bottom = 30.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 9 )
+text = "Retry"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UsernameInput" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 125.0
+margin_bottom = 125.0
+rect_pivot_offset = Vector2( -951, 82 )
+mouse_filter = 2
+
+[node name="PromptText" type="Label" parent="UsernameInput"]
+visible = false
+margin_left = 540.0
+margin_top = 524.0
+margin_right = 540.0
+margin_bottom = 555.0
+custom_fonts/font = SubResource( 2 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Username" type="LineEdit" parent="UsernameInput/PromptText"]
+unique_name_in_owner = true
+visible = false
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -88.0
+margin_top = 90.0
+margin_right = 88.0
+margin_bottom = 121.9
+custom_fonts/font = SubResource( 5 )
+align = 1
+max_length = 15
+context_menu_enabled = false
+placeholder_text = "Username"
+caret_blink = true
+caret_blink_speed = 0.5
+script = ExtResource( 9 )
+
+[node name="PasswordContainer" type="VBoxContainer" parent="UsernameInput/PromptText/Username"]
+visible = false
+margin_left = -452.0
+margin_top = 40.0
+margin_right = 628.0
+margin_bottom = 184.0
+rect_min_size = Vector2( 1080, 31.9 )
+mouse_filter = 2
+
+[node name="Password" type="LineEdit" parent="UsernameInput/PromptText/Username/PasswordContainer"]
+unique_name_in_owner = true
+margin_left = 452.0
+margin_right = 628.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 176, 0 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 7 )
+align = 1
+max_length = 50
+secret = true
+context_menu_enabled = false
+placeholder_text = "Password"
+caret_blink = true
+caret_blink_speed = 0.5
+script = ExtResource( 13 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UsernameInput/PromptText/Username/PasswordContainer"]
+margin_top = 33.0
+margin_right = 1080.0
+margin_bottom = 52.0
+
+[node name="LoginError" type="Label" parent="UsernameInput/PromptText/Username/PasswordContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+margin_right = 1080.0
+margin_bottom = 19.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+text = "asddas"
+align = 1
+autowrap = true
+
+[node name="Login" type="TextureButton" parent="UsernameInput/PromptText/Username/PasswordContainer"]
+unique_name_in_owner = true
+visible = false
+margin_left = 487.0
+margin_top = 56.0
+margin_right = 592.0
+margin_bottom = 98.0
+grow_horizontal = 0
+rect_min_size = Vector2( 105, 42 )
+mouse_filter = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 6 )
+expand = true
+script = ExtResource( 4 )
+priority = 15
+
+[node name="Label" type="Label" parent="UsernameInput/PromptText/Username/PasswordContainer/Login"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Login"
+align = 1
+valign = 1
+
+[node name="Cancel" type="TextureButton" parent="UsernameInput/PromptText/Username/PasswordContainer"]
+unique_name_in_owner = true
+visible = false
+margin_left = 487.0
+margin_top = 102.0
+margin_right = 592.0
+margin_bottom = 144.0
+grow_horizontal = 0
+rect_min_size = Vector2( 105, 42 )
+mouse_filter = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource( 11 )
+texture_pressed = ExtResource( 12 )
+expand = true
+script = ExtResource( 4 )
+priority = 6
+
+[node name="Label" type="Label" parent="UsernameInput/PromptText/Username/PasswordContainer/Cancel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Cancel"
+align = 1
+valign = 1
+
+[node name="RememberMeContainer" type="HBoxContainer" parent="UsernameInput/PromptText/Username/PasswordContainer"]
+unique_name_in_owner = true
+visible = false
+margin_top = 148.0
+margin_right = 1080.0
+margin_bottom = 188.0
+alignment = 1
+
+[node name="Label" type="Label" parent="UsernameInput/PromptText/Username/PasswordContainer/RememberMeContainer"]
+margin_left = 440.0
+margin_top = 10.0
+margin_right = 559.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 8 )
+text = "Remember me"
+
+[node name="RememberMe" type="CheckButton" parent="UsernameInput/PromptText/Username/PasswordContainer/RememberMeContainer"]
+unique_name_in_owner = true
+margin_left = 563.0
+margin_right = 639.0
+margin_bottom = 40.0
+focus_mode = 0
+pressed = true
+enabled_focus_mode = 0
+
+[node name="TextContainer" type="VBoxContainer" parent="UsernameInput/PromptText/Username"]
+margin_left = -155.0
+margin_top = 30.0
+margin_right = 338.0
+margin_bottom = 149.0
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UsernameInput/PromptText/Username/TextContainer"]
+margin_right = 493.0
+margin_bottom = 5.0
+rect_min_size = Vector2( 10, 5 )
+
+[node name="Warning" type="Label" parent="UsernameInput/PromptText/Username/TextContainer"]
+visible = false
+margin_top = 9.0
+margin_right = 493.0
+margin_bottom = 50.0
+custom_fonts/font = SubResource( 6 )
+text = "Your username will be public.
+Please make sure your username doesn't inlude profanity."
+
+[node name="Error" type="Label" parent="UsernameInput/PromptText/Username/TextContainer"]
+unique_name_in_owner = true
+visible = false
+margin_top = 9.0
+margin_right = 493.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+align = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UsernameInput/PromptText/Username/TextContainer"]
+margin_top = 9.0
+margin_right = 493.0
+margin_bottom = 34.0
+mouse_filter = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UsernameInput/PromptText/Username/TextContainer/HBoxContainer"]
+margin_left = 246.0
+margin_right = 246.0
+margin_bottom = 25.0
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UsernameInput/PromptText/Username/TextContainer/HBoxContainer/VBoxContainer"]
+margin_bottom = 25.0
+rect_min_size = Vector2( 0, 25 )
+
+[node name="PlayedBefore" type="TextureButton" parent="UsernameInput/PromptText/Username/TextContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+margin_top = 29.0
+margin_right = 180.0
+margin_bottom = 101.0
+grow_horizontal = 0
+rect_min_size = Vector2( 180, 72 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = ExtResource( 11 )
+texture_pressed = ExtResource( 12 )
+expand = true
+script = ExtResource( 4 )
+priority = 20
+
+[node name="Label" type="Label" parent="UsernameInput/PromptText/Username/TextContainer/HBoxContainer/VBoxContainer/PlayedBefore"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "I've played 
+before"
+align = 1
+valign = 1
+
+[node name="Proceed" type="TextureButton" parent="UsernameInput/PromptText/Username/TextContainer/HBoxContainer"]
+visible = false
+margin_left = 286.0
+margin_right = 391.0
+margin_bottom = 42.0
+grow_horizontal = 0
+rect_min_size = Vector2( 105, 42 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 6 )
+expand = true
+script = ExtResource( 4 )
+priority = 25
+
+[node name="Label" type="Label" parent="UsernameInput/PromptText/Username/TextContainer/HBoxContainer/Proceed"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Proceed"
+align = 1
+valign = 1
+
+[node name="Label" type="Label" parent="UsernameInput/PromptText/Username"]
+visible = false
+margin_right = 40.0
+margin_bottom = 14.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -40.0
+margin_right = 40.0
+
+[node name="Username" type="Label" parent="VBoxContainer"]
+modulate = Color( 1, 1, 1, 0 )
+margin_right = 40.0
+margin_bottom = 19.0
+custom_fonts/font = SubResource( 3 )
+
+[node name="Version" type="Label" parent="VBoxContainer"]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 23.0
+margin_right = 40.0
+margin_bottom = 42.0
+custom_fonts/font = SubResource( 1 )
+text = "v0.1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]
+
+[connection signal="button_left_area" from="LoadingInfo/SplashText/Retry" to="." method="_on_Retry_button_left_area"]
+[connection signal="button_pressed" from="LoadingInfo/SplashText/Retry" to="." method="_on_Retry_button_pressed"]
+[connection signal="button_released" from="LoadingInfo/SplashText/Retry" to="." method="_on_Retry_button_released"]
+[connection signal="text_changed" from="UsernameInput/PromptText/Username" to="UsernameInput/PromptText/Username" method="_on_LineEdit_text_changed"]
+[connection signal="text_changed" from="UsernameInput/PromptText/Username/PasswordContainer/Password" to="UsernameInput/PromptText/Username/PasswordContainer/Password" method="_on_Password_text_changed"]
+[connection signal="button_left_area" from="UsernameInput/PromptText/Username/PasswordContainer/Login" to="." method="_on_Login_button_left_area"]
+[connection signal="button_pressed" from="UsernameInput/PromptText/Username/PasswordContainer/Login" to="." method="_on_Login_button_pressed"]
+[connection signal="button_released" from="UsernameInput/PromptText/Username/PasswordContainer/Login" to="." method="_on_Login_button_released"]
+[connection signal="button_left_area" from="UsernameInput/PromptText/Username/PasswordContainer/Cancel" to="." method="_on_Cancel_button_left_area"]
+[connection signal="button_pressed" from="UsernameInput/PromptText/Username/PasswordContainer/Cancel" to="." method="_on_Cancel_button_pressed"]
+[connection signal="button_released" from="UsernameInput/PromptText/Username/PasswordContainer/Cancel" to="." method="_on_Cancel_button_released"]
+[connection signal="button_left_area" from="UsernameInput/PromptText/Username/TextContainer/HBoxContainer/VBoxContainer/PlayedBefore" to="." method="_on_PlayedBefore_button_left_area"]
+[connection signal="button_pressed" from="UsernameInput/PromptText/Username/TextContainer/HBoxContainer/VBoxContainer/PlayedBefore" to="." method="_on_PlayedBefore_button_pressed"]
+[connection signal="button_released" from="UsernameInput/PromptText/Username/TextContainer/HBoxContainer/VBoxContainer/PlayedBefore" to="." method="_on_PlayedBefore_button_released"]
+[connection signal="button_left_area" from="UsernameInput/PromptText/Username/TextContainer/HBoxContainer/Proceed" to="." method="_on_Proceed_button_left_area"]
+[connection signal="button_pressed" from="UsernameInput/PromptText/Username/TextContainer/HBoxContainer/Proceed" to="." method="_on_Proceed_button_pressed"]
+[connection signal="button_released" from="UsernameInput/PromptText/Username/TextContainer/HBoxContainer/Proceed" to="." method="_on_Proceed_button_released"]

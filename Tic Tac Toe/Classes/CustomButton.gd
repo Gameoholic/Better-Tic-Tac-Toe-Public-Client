@@ -1,8 +1,9 @@
 extends TextureButton
 class_name CustomButton
 
-export (bool) var enabled = true #Whether the button can be pressed. If it has the highest priority, it will ignore other buttons.
+export (bool) var enabled := true #Whether the button can be pressed. If it has the highest priority, it will ignore other buttons.
 export (int) var priority = 5 #The button with the highest priority will be clicked
+export (String) var sound = "click" #The sound that will be played upon button release
 
 signal button_pressed
 signal button_released
@@ -27,6 +28,8 @@ func on_pressed() -> void:
 func on_released() -> void:
 	texture_normal = normal_texture
 	CustomButtons.untrack_button_for_leave_area(self)
+	if (enabled):
+		AudioPlayer.play_sound(sound)
 	emit_signal("button_released")
 
 func on_left_area() -> void:

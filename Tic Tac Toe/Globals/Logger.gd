@@ -2,8 +2,6 @@ extends Node
 
 enum {NOTICE, WARNING, ALERT, ERROR} #Severities
 
-var lines := []
-
 func _ready() -> void:
 	#Rename latest.log to one with a date
 	var directory = Directory.new()
@@ -19,28 +17,17 @@ func _ready() -> void:
 	log_file.close()
 	Logger.log("Date: " + get_date_string())
 	Logger.log("Game started on version " + GlobalData.version + ".")
-	
-	#Start logger timer:
-	var logger_timer := Timer.new()
-	add_child(logger_timer)
-	logger_timer.connect("timeout", self, "_on_Logger_Timer_timeout")
-	logger_timer.set_wait_time(1.0)
-	logger_timer.set_one_shot(false)
-	logger_timer.start()
-
-func _on_Logger_Timer_timeout():
-	var log_file := File.new()
-	log_file.open("user://logs/latest.log", File.READ_WRITE)
-	while (!lines.empty()):
-		log_file.seek_end()
-		log_file.store_line(lines.pop_front())
-	log_file.close()
-	
 
 func log(msg: String) -> void:
 	var time := OS.get_time()
 	var prefix := "[" + get_time_string() + "] LOG: "
-	lines.append(prefix + msg)
+	var log_file := File.new()
+	log_file.open("user://logs/latest.log", File.READ_WRITE)
+	log_file.seek_end()
+	var line: String = prefix + msg
+	print(line)
+	log_file.store_line(line)
+	log_file.close()
 
 func error(msg: String, severity: int) -> void:
 	var severity_string: String
@@ -54,7 +41,14 @@ func error(msg: String, severity: int) -> void:
 		ERROR:
 			severity_string = "Error"
 	var prefix := "[" + get_time_string() + "] " + severity_string + ": "
-	lines.append(prefix + msg)
+	var log_file := File.new()
+	log_file.open("user://logs/latest.log", File.READ_WRITE)
+	log_file.seek_end()
+	var line: String = prefix + msg
+	print(line)
+	log_file.store_line(line)
+	log_file.close()
+	
 	
 func get_time_string() -> String:
 	var hour_value: int = OS.get_time().hour

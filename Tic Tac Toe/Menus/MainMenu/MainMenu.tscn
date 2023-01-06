@@ -1,20 +1,31 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://Assets/light-gray-background-with-small-sparkles-texture-macro-focus-microtexture_328295-112.webp" type="Texture" id=1]
 [ext_resource path="res://Assets/menu_button_purple_unpressed.png" type="Texture" id=2]
 [ext_resource path="res://Assets/GUI/Comfortaa-Bold.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://Assets/gray-painted-background_53876-94041.webp" type="Texture" id=4]
+[ext_resource path="res://Assets/Backgrounds/Untitled.png" type="Texture" id=4]
 [ext_resource path="res://Assets/menu_button_purple_pressed.png" type="Texture" id=5]
 [ext_resource path="res://Assets/menu_button_yellow_pressed.png" type="Texture" id=6]
 [ext_resource path="res://Assets/menu_button_yellow_unpressed.png" type="Texture" id=7]
 [ext_resource path="res://Assets/menu_button_orange_pressed.png" type="Texture" id=8]
 [ext_resource path="res://Assets/menu_button_orange_unpressed.png" type="Texture" id=9]
+[ext_resource path="res://Assets/menu_button_red_unpressed.png" type="Texture" id=10]
 [ext_resource path="res://Menus/MainMenu/MainMenu.gd" type="Script" id=11]
 [ext_resource path="res://Assets/menu_button_gray_unpressed.png" type="Texture" id=12]
 [ext_resource path="res://Assets/menu_button_gray_pressed.png" type="Texture" id=13]
 [ext_resource path="res://Assets/blitz.png" type="Texture" id=14]
 [ext_resource path="res://Assets/bullet.png" type="Texture" id=15]
 [ext_resource path="res://Classes/CustomButton.gd" type="Script" id=16]
+[ext_resource path="res://Assets/menu_button_red_pressed.png" type="Texture" id=17]
+[ext_resource path="res://Assets/Icons/Friends_pressed.png" type="Texture" id=18]
+[ext_resource path="res://Assets/GUI/a.png" type="Texture" id=19]
+[ext_resource path="res://Assets/Icons/Friends_unpressed.png" type="Texture" id=20]
+[ext_resource path="res://Classes/DynamicTween.gd" type="Script" id=21]
+[ext_resource path="res://Assets/Icons/Plus.png" type="Texture" id=22]
+[ext_resource path="res://Assets/Icons/Blocked.png" type="Texture" id=23]
+[ext_resource path="res://Assets/menu_button_white_pressed.png" type="Texture" id=24]
+[ext_resource path="res://Assets/menu_button_white_unpressed.png" type="Texture" id=25]
+[ext_resource path="res://Menus/MainMenu/Password.gd" type="Script" id=26]
 
 [sub_resource type="DynamicFont" id=1]
 size = 50
@@ -23,6 +34,12 @@ use_filter = true
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=2]
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 24
+outline_size = 2
 use_filter = true
 font_data = ExtResource( 3 )
 
@@ -49,9 +66,48 @@ outline_size = 2
 use_filter = true
 font_data = ExtResource( 3 )
 
+[sub_resource type="DynamicFont" id=12]
+size = 20
+outline_size = 2
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxFlat" id=10]
+bg_color = Color( 0.490196, 0.490196, 0.490196, 1 )
+corner_detail = 1
+
+[sub_resource type="DynamicFont" id=11]
+size = 25
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=13]
+size = 25
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
+font_data = ExtResource( 3 )
+
 [sub_resource type="DynamicFont" id=4]
 size = 40
 outline_size = 3
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=14]
+size = 30
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=15]
+size = 20
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=16]
+size = 23
 use_filter = true
 font_data = ExtResource( 3 )
 
@@ -59,23 +115,26 @@ font_data = ExtResource( 3 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 11 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="PlayMenu" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Background" type="NinePatchRect" parent="PlayMenu"]
+[node name="Background" type="NinePatchRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayMenu"]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 4
+
+[node name="PlayMenu" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PlayMenu"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_constants/margin_right = 30
@@ -86,17 +145,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayMenu"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PlayMenu"]
 margin_left = 30.0
 margin_top = 30.0
 margin_right = 1050.0
 margin_bottom = 1050.0
 rect_pivot_offset = Vector2( -786, -238 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Username" type="Label" parent="PlayMenu/VBoxContainer"]
+[node name="Username" type="Label" parent="CanvasLayer/PlayMenu/VBoxContainer"]
 margin_right = 1020.0
 margin_bottom = 57.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -107,7 +163,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Version" type="Label" parent="PlayMenu/VBoxContainer"]
+[node name="Version" type="Label" parent="CanvasLayer/PlayMenu/VBoxContainer"]
 margin_top = 61.0
 margin_right = 1020.0
 margin_bottom = 80.0
@@ -117,7 +173,7 @@ custom_fonts/font = SubResource( 2 )
 text = "Version 0.1"
 valign = 1
 
-[node name="ServerDetails" type="Label" parent="PlayMenu/VBoxContainer"]
+[node name="ServerDetails" type="Label" parent="CanvasLayer/PlayMenu/VBoxContainer"]
 margin_top = 84.0
 margin_right = 1020.0
 margin_bottom = 103.0
@@ -130,16 +186,43 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayMenu/VBoxContainer"]
+[node name="LogoutContainer" type="Control" parent="CanvasLayer/PlayMenu/VBoxContainer"]
 margin_top = 107.0
 margin_right = 1020.0
-margin_bottom = 807.0
+margin_bottom = 107.0
+
+[node name="Logout" type="TextureButton" parent="CanvasLayer/PlayMenu/VBoxContainer/LogoutContainer"]
+margin_right = 125.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 125, 50 )
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 17 )
+expand = true
+script = ExtResource( 16 )
+priority = 15
+
+[node name="Label" type="Label" parent="CanvasLayer/PlayMenu/VBoxContainer/LogoutContainer/Logout"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 9 )
+text = "Log out"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PlayMenu/VBoxContainer"]
+margin_top = 111.0
+margin_right = 1020.0
+margin_bottom = 811.0
 custom_constants/margin_top = 700
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MiddleButtons" type="VBoxContainer" parent="PlayMenu"]
+[node name="MiddleButtons" type="VBoxContainer" parent="CanvasLayer/PlayMenu"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -153,7 +236,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ModesContainer" type="Control" parent="PlayMenu/MiddleButtons"]
+[node name="ModesContainer" type="Control" parent="CanvasLayer/PlayMenu/MiddleButtons"]
 margin_left = 134.0
 margin_right = 384.0
 margin_bottom = 166.0
@@ -161,7 +244,7 @@ rect_min_size = Vector2( 250, 166 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ModeButtons" type="Control" parent="PlayMenu/MiddleButtons/ModesContainer"]
+[node name="ModeButtons" type="Control" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer"]
 margin_left = -66.0
 margin_right = 452.0
 margin_bottom = 83.0
@@ -170,7 +253,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Blitz" type="TextureButton" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons"]
+[node name="Blitz" type="TextureButton" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons"]
 margin_left = 129.0
 margin_right = 254.0
 margin_bottom = 83.0
@@ -179,11 +262,8 @@ texture_normal = ExtResource( 12 )
 texture_pressed = ExtResource( 13 )
 expand = true
 script = ExtResource( 16 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz"]
+[node name="Label" type="Label" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 1.28573
@@ -199,7 +279,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Icon" type="TextureRect" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz"]
+[node name="Icon" type="TextureRect" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -216,7 +296,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Bullet" type="TextureButton" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons"]
+[node name="Bullet" type="TextureButton" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons"]
 margin_left = 129.0
 margin_right = 254.0
 margin_bottom = 83.0
@@ -229,7 +309,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet"]
+[node name="Label" type="Label" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 1.28573
@@ -245,7 +325,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Icon" type="TextureRect" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet"]
+[node name="Icon" type="TextureRect" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -262,7 +342,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Classic" type="TextureButton" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons"]
+[node name="Classic" type="TextureButton" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons"]
 margin_left = 129.0
 margin_right = 254.0
 margin_bottom = 83.0
@@ -271,12 +351,9 @@ texture_normal = ExtResource( 12 )
 texture_pressed = ExtResource( 13 )
 expand = true
 script = ExtResource( 16 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 priority = 6
 
-[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic"]
+[node name="Label" type="Label" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -288,7 +365,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Modes" type="TextureButton" parent="PlayMenu/MiddleButtons/ModesContainer"]
+[node name="Modes" type="TextureButton" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 250, 166 )
@@ -298,12 +375,9 @@ texture_normal = ExtResource( 2 )
 texture_pressed = ExtResource( 5 )
 expand = true
 script = ExtResource( 16 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 priority = 10
 
-[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/ModesContainer/Modes"]
+[node name="Label" type="Label" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/Modes"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -311,11 +385,8 @@ custom_fonts/font = SubResource( 5 )
 text = "MODES"
 align = 1
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="ModeDescription" type="Panel" parent="PlayMenu/MiddleButtons/ModesContainer"]
+[node name="ModeDescription" type="Panel" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer"]
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -328,7 +399,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/ModesContainer/ModeDescription"]
+[node name="Label" type="Label" parent="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeDescription"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_fonts/font = SubResource( 8 )
@@ -342,12 +413,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PlayMenu/MiddleButtons"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PlayMenu/MiddleButtons"]
 margin_top = 170.0
 margin_right = 518.0
 margin_bottom = 336.0
 
-[node name="Play" type="TextureButton" parent="PlayMenu/MiddleButtons/HBoxContainer"]
+[node name="Play" type="TextureButton" parent="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer"]
 margin_right = 250.0
 margin_bottom = 166.0
 rect_min_size = Vector2( 250, 166 )
@@ -357,7 +428,7 @@ expand = true
 script = ExtResource( 16 )
 priority = 10
 
-[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/HBoxContainer/Play"]
+[node name="Label" type="Label" parent="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Play"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -369,7 +440,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SelectedMode" type="Label" parent="PlayMenu/MiddleButtons/HBoxContainer/Play"]
+[node name="SelectedMode" type="Label" parent="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Play"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 38.0
@@ -379,11 +450,8 @@ custom_fonts/font = SubResource( 6 )
 text = "Classic"
 align = 1
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayMenu/MiddleButtons/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer"]
 margin_left = 254.0
 margin_right = 264.0
 margin_bottom = 166.0
@@ -393,7 +461,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Custom" type="TextureButton" parent="PlayMenu/MiddleButtons/HBoxContainer"]
+[node name="Custom" type="TextureButton" parent="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer"]
 margin_left = 268.0
 margin_right = 518.0
 margin_bottom = 166.0
@@ -403,8 +471,9 @@ texture_pressed = ExtResource( 6 )
 expand = true
 script = ExtResource( 16 )
 priority = 10
+sound = "error"
 
-[node name="Label" type="Label" parent="PlayMenu/MiddleButtons/HBoxContainer/Custom"]
+[node name="Label" type="Label" parent="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Custom"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.00003
@@ -414,11 +483,135 @@ custom_fonts/font = SubResource( 5 )
 text = "CUSTOM"
 align = 1
 valign = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Custom"]
+anchor_left = 0.5
+anchor_top = 0.7
+anchor_right = 0.5
+anchor_bottom = 0.78
+margin_left = -156.5
+margin_top = -166.0
+margin_right = 156.5
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "Coming soon..."
+align = 1
+valign = 2
+
+[node name="FriendsMenu" type="Control" parent="CanvasLayer/PlayMenu"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Container" type="TextureRect" parent="CanvasLayer/PlayMenu/FriendsMenu"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -200.0
+margin_top = -200.0
+rect_min_size = Vector2( 200, 200 )
+texture = ExtResource( 19 )
+expand = true
+stretch_mode = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LookingForGame" type="Panel" parent="PlayMenu"]
+[node name="FriendButton" type="TextureButton" parent="CanvasLayer/PlayMenu/FriendsMenu/Container"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -75.0
+margin_top = -75.0
+margin_right = 75.0
+margin_bottom = 75.0
+rect_min_size = Vector2( 150, 150 )
+texture_normal = ExtResource( 20 )
+texture_pressed = ExtResource( 18 )
+expand = true
+script = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FriendsPanel" type="VBoxContainer" parent="CanvasLayer/PlayMenu/FriendsMenu"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -540.0
+margin_right = 200.0
+margin_bottom = 340.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="CanvasLayer/PlayMenu/FriendsMenu/FriendsPanel"]
+margin_right = 200.0
+margin_bottom = 880.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 200, 880 )
+custom_styles/panel = SubResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/PlayMenu/FriendsMenu/FriendsPanel/Panel"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -50.5
+margin_right = 50.5
+margin_bottom = 29.0
+custom_colors/font_color = Color( 0.94902, 0.6, 0, 1 )
+custom_fonts/font = SubResource( 11 )
+text = "Friends"
+align = 2
+valign = 1
+
+[node name="Friends" type="TextureButton" parent="CanvasLayer/PlayMenu/FriendsMenu/FriendsPanel/Panel"]
+margin_left = 5.0
+margin_top = 28.0
+margin_right = 75.0
+margin_bottom = 75.0
+rect_min_size = Vector2( 75, 75 )
+texture_normal = ExtResource( 22 )
+texture_pressed = ExtResource( 22 )
+expand = true
+script = ExtResource( 16 )
+sound = "error"
+
+[node name="Blocked" type="TextureButton" parent="CanvasLayer/PlayMenu/FriendsMenu/FriendsPanel/Panel"]
+margin_left = 120.0
+margin_top = 28.0
+margin_right = 195.0
+margin_bottom = 103.0
+rect_min_size = Vector2( 75, 75 )
+texture_normal = ExtResource( 23 )
+texture_pressed = ExtResource( 23 )
+expand = true
+script = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+sound = "error"
+
+[node name="Label2" type="Label" parent="CanvasLayer/PlayMenu/FriendsMenu/FriendsPanel/Panel"]
+anchor_left = 0.5
+anchor_top = 0.15
+anchor_right = 0.5
+anchor_bottom = 0.8
+margin_left = -95.5
+margin_top = -14.5
+margin_right = 95.5
+margin_bottom = 14.5
+custom_colors/font_color = Color( 0.94902, 0.6, 0, 1 )
+custom_fonts/font = SubResource( 13 )
+text = "Coming soon..."
+
+[node name="LookingForGame" type="Panel" parent="CanvasLayer/PlayMenu"]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.8
@@ -429,7 +622,7 @@ margin_top = -40.0
 margin_right = 400.0
 margin_bottom = 40.0
 
-[node name="Label" type="Label" parent="PlayMenu/LookingForGame"]
+[node name="Label" type="Label" parent="CanvasLayer/PlayMenu/LookingForGame"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -441,7 +634,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NewVersionReminder" type="AcceptDialog" parent="PlayMenu"]
+[node name="NewVersionReminder" type="AcceptDialog" parent="CanvasLayer/PlayMenu"]
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -517.0
@@ -455,45 +648,162 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+layer = 2
 
-[node name="NinePatchRect" type="NinePatchRect" parent="CanvasLayer"]
-anchor_top = 0.9
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2( 2160, 2160 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+self_modulate = Color( 1, 1, 1, 0.0470588 )
+position = Vector2( 590, 590 )
+texture = ExtResource( 4 )
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+layer = 6
+
+[node name="Tint" type="ColorRect" parent="CanvasLayer2"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_min_size = Vector2( 0, 150 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-texture = ExtResource( 4 )
+color = Color( 0, 0, 0, 0.921569 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ModeDescriptionTween" type="Tween" parent="."]
+[node name="ErrorText" type="AcceptDialog" parent="CanvasLayer2"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -41.5
+margin_top = -29.0
+margin_right = 124.5
+margin_bottom = 87.0
+rect_min_size = Vector2( 166, 116 )
+popup_exclusive = true
+window_title = ""
+dialog_autowrap = true
 
-[node name="ModeButtonsTween" type="Tween" parent="."]
+[node name="NewPasswordContainer" type="VBoxContainer" parent="CanvasLayer2"]
+unique_name_in_owner = true
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -201.5
+margin_top = -31.5
+margin_right = 201.5
+margin_bottom = 31.5
+custom_constants/separation = 0
+alignment = 1
 
-[connection signal="button_left_area" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_button_left_area"]
-[connection signal="button_pressed" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_button_pressed"]
-[connection signal="button_released" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_button_released"]
-[connection signal="mouse_hover" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_mouse_hover"]
-[connection signal="mouse_stop_hover" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_mouse_stop_hover"]
-[connection signal="button_left_area" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_button_left_area"]
-[connection signal="button_pressed" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_button_pressed"]
-[connection signal="button_released" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_button_released"]
-[connection signal="mouse_hover" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_mouse_hover"]
-[connection signal="mouse_stop_hover" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_mouse_stop_hover"]
-[connection signal="button_left_area" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_button_left_area"]
-[connection signal="button_pressed" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_button_pressed"]
-[connection signal="button_released" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_button_released"]
-[connection signal="mouse_hover" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_mouse_hover"]
-[connection signal="mouse_stop_hover" from="PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_mouse_stop_hover"]
-[connection signal="button_left_area" from="PlayMenu/MiddleButtons/ModesContainer/Modes" to="." method="_on_Modes_button_left_area"]
-[connection signal="button_pressed" from="PlayMenu/MiddleButtons/ModesContainer/Modes" to="." method="_on_Modes_button_pressed"]
-[connection signal="button_released" from="PlayMenu/MiddleButtons/ModesContainer/Modes" to="." method="_on_Modes_button_released"]
-[connection signal="button_left_area" from="PlayMenu/MiddleButtons/HBoxContainer/Play" to="." method="_on_Play_button_left_area"]
-[connection signal="button_pressed" from="PlayMenu/MiddleButtons/HBoxContainer/Play" to="." method="_on_Play_button_pressed"]
-[connection signal="button_released" from="PlayMenu/MiddleButtons/HBoxContainer/Play" to="." method="_on_Play_button_released"]
-[connection signal="button_left_area" from="PlayMenu/MiddleButtons/HBoxContainer/Custom" to="." method="_on_Custom_button_left_area"]
-[connection signal="button_pressed" from="PlayMenu/MiddleButtons/HBoxContainer/Custom" to="." method="_on_Custom_button_pressed"]
-[connection signal="button_released" from="PlayMenu/MiddleButtons/HBoxContainer/Custom" to="." method="_on_Custom_button_released"]
+[node name="Label" type="Label" parent="CanvasLayer2/NewPasswordContainer"]
+margin_right = 403.0
+margin_bottom = 35.0
+grow_horizontal = 2
+custom_fonts/font = SubResource( 14 )
+text = "Enter a password:"
+align = 1
+
+[node name="Password" type="LineEdit" parent="CanvasLayer2/NewPasswordContainer"]
+margin_top = 35.0
+margin_right = 403.0
+margin_bottom = 85.0
+rect_min_size = Vector2( 0, 50 )
+custom_fonts/font = SubResource( 15 )
+align = 1
+max_length = 50
+secret = true
+context_menu_enabled = false
+placeholder_text = "Password"
+caret_blink = true
+caret_blink_speed = 0.5
+script = ExtResource( 26 )
+
+[node name="ErrorText" type="Label" parent="CanvasLayer2/NewPasswordContainer"]
+visible = false
+margin_right = 40.0
+margin_bottom = 14.0
+align = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer2/NewPasswordContainer"]
+margin_top = 85.0
+margin_right = 403.0
+margin_bottom = 95.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="Proceed" type="TextureButton" parent="CanvasLayer2/NewPasswordContainer"]
+visible = false
+margin_left = 122.0
+margin_top = 95.0
+margin_right = 279.5
+margin_bottom = 158.0
+grow_horizontal = 0
+rect_min_size = Vector2( 157.5, 63 )
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture_normal = ExtResource( 25 )
+texture_pressed = ExtResource( 24 )
+expand = true
+script = ExtResource( 16 )
+priority = 25
+
+[node name="Label" type="Label" parent="CanvasLayer2/NewPasswordContainer/Proceed"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 16 )
+text = "Proceed"
+align = 1
+valign = 1
+
+[node name="Tweens" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ModeDescriptionTween" type="Tween" parent="Tweens"]
+
+[node name="ModeButtonsTween" type="Tween" parent="Tweens"]
+
+[node name="FriendsMenuTween" type="Tween" parent="Tweens"]
+script = ExtResource( 21 )
+
+[connection signal="button_left_area" from="CanvasLayer/PlayMenu/VBoxContainer/LogoutContainer/Logout" to="." method="_on_Logout_button_left_area"]
+[connection signal="button_pressed" from="CanvasLayer/PlayMenu/VBoxContainer/LogoutContainer/Logout" to="." method="_on_Logout_button_pressed"]
+[connection signal="button_released" from="CanvasLayer/PlayMenu/VBoxContainer/LogoutContainer/Logout" to="." method="_on_Logout_button_released"]
+[connection signal="button_left_area" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_button_left_area"]
+[connection signal="button_pressed" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_button_pressed"]
+[connection signal="button_released" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_button_released"]
+[connection signal="mouse_hover" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_mouse_hover"]
+[connection signal="mouse_stop_hover" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Blitz" to="." method="_on_Blitz_mouse_stop_hover"]
+[connection signal="button_left_area" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_button_left_area"]
+[connection signal="button_pressed" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_button_pressed"]
+[connection signal="button_released" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_button_released"]
+[connection signal="mouse_hover" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_mouse_hover"]
+[connection signal="mouse_stop_hover" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Bullet" to="." method="_on_Bullet_mouse_stop_hover"]
+[connection signal="button_left_area" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_button_left_area"]
+[connection signal="button_pressed" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_button_pressed"]
+[connection signal="button_released" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_button_released"]
+[connection signal="mouse_hover" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_mouse_hover"]
+[connection signal="mouse_stop_hover" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/ModeButtons/Classic" to="." method="_on_Classic_mouse_stop_hover"]
+[connection signal="button_left_area" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/Modes" to="." method="_on_Modes_button_left_area"]
+[connection signal="button_pressed" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/Modes" to="." method="_on_Modes_button_pressed"]
+[connection signal="button_released" from="CanvasLayer/PlayMenu/MiddleButtons/ModesContainer/Modes" to="." method="_on_Modes_button_released"]
+[connection signal="button_left_area" from="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Play" to="." method="_on_Play_button_left_area"]
+[connection signal="button_pressed" from="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Play" to="." method="_on_Play_button_pressed"]
+[connection signal="button_released" from="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Play" to="." method="_on_Play_button_released"]
+[connection signal="button_left_area" from="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Custom" to="." method="_on_Custom_button_left_area"]
+[connection signal="button_pressed" from="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Custom" to="." method="_on_Custom_button_pressed"]
+[connection signal="button_released" from="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Custom" to="." method="_on_Custom_button_released"]
+[connection signal="button_released" from="CanvasLayer/PlayMenu/FriendsMenu/Container/FriendButton" to="." method="_on_FriendButton_button_released"]
+[connection signal="confirmed" from="CanvasLayer2/ErrorText" to="." method="_on_ErrorText_confirmed"]
+[connection signal="custom_action" from="CanvasLayer2/ErrorText" to="." method="_on_ErrorText_custom_action"]
+[connection signal="text_changed" from="CanvasLayer2/NewPasswordContainer/Password" to="CanvasLayer2/NewPasswordContainer/Password" method="_on_Password_text_changed"]
+[connection signal="button_left_area" from="CanvasLayer2/NewPasswordContainer/Proceed" to="." method="_on_Proceed_button_left_area"]
+[connection signal="button_pressed" from="CanvasLayer2/NewPasswordContainer/Proceed" to="." method="_on_Proceed_button_pressed"]
+[connection signal="button_released" from="CanvasLayer2/NewPasswordContainer/Proceed" to="." method="_on_Proceed_button_released"]

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/boot.wav-1c2b36c71792f51582e232ba29d587d3.sample"
+
+[deps]
+
+source_file="res://Assets/Sounds/boot.wav"
+dest_files=[ "res://.import/boot.wav-1c2b36c71792f51582e232ba29d587d3.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

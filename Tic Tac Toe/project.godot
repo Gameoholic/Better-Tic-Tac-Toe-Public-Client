@@ -9,42 +9,135 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "PackedArrayPropertyEditor",
+"class": "ArrayPropertyEditor",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/elements/array_property_editor.gd"
+}, {
+"base": "VBoxContainer",
+"class": "BaseCollectionPropertyEditor",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/elements/base_property_editor.gd"
+}, {
+"base": "Button",
+"class": "CollectionHeaderButton",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/elements/collection_header_button.gd"
+}, {
 "base": "TextureButton",
 "class": "CustomButton",
 "language": "GDScript",
 "path": "res://Classes/CustomButton.gd"
 }, {
+"base": "EditorResourcePicker",
+"class": "CustomResourcePicker",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/elements/custom_resource_picker.gd"
+}, {
+"base": "PackedArrayPropertyEditor",
+"class": "DictPropertyEditor",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/elements/dict_property_editor.gd"
+}, {
+"base": "EditorInspectorPlugin",
+"class": "DictionaryInspectorPlugin",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/inspector_plugin.gd"
+}, {
+"base": "EditorProperty",
+"class": "DictionaryInspectorProperty",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/inspector_property.gd"
+}, {
+"base": "Tween",
+"class": "DynamicTween",
+"language": "GDScript",
+"path": "res://Classes/DynamicTween.gd"
+}, {
+"base": "Button",
+"class": "EditorArrayIndex",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/elements/array_index.gd"
+}, {
+"base": "BaseCollectionPropertyEditor",
+"class": "ObjectPropertyEditor",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/elements/object_property_editor.gd"
+}, {
+"base": "BaseCollectionPropertyEditor",
+"class": "PackedArrayPropertyEditor",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/elements/packed_array_property_editor.gd"
+}, {
+"base": "GridContainer",
+"class": "TensorPropertyEditor",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/elements/tensor_property_editor.gd"
+}, {
+"base": "Button",
+"class": "ThemeIconButton",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/elements/editor_icon_button.gd"
+}, {
 "base": "Node",
 "class": "Tile",
 "language": "GDScript",
 "path": "res://Classes/Tile.gd"
+}, {
+"base": "OptionButton",
+"class": "TypeOptionButton",
+"language": "GDScript",
+"path": "res://addons/dictionary_inspector/elements/type_option_button.gd"
 } ]
 _global_script_class_icons={
+"ArrayPropertyEditor": "",
+"BaseCollectionPropertyEditor": "",
+"CollectionHeaderButton": "",
 "CustomButton": "",
-"Tile": ""
+"CustomResourcePicker": "",
+"DictPropertyEditor": "",
+"DictionaryInspectorPlugin": "",
+"DictionaryInspectorProperty": "",
+"DynamicTween": "",
+"EditorArrayIndex": "",
+"ObjectPropertyEditor": "",
+"PackedArrayPropertyEditor": "",
+"TensorPropertyEditor": "",
+"ThemeIconButton": "",
+"Tile": "",
+"TypeOptionButton": ""
 }
 
 [application]
 
 config/name="Tic Tac Toe"
-run/main_scene="res://Menus/LoginScreen.tscn"
+run/main_scene="res://Menus/BootScreen/BootScreen.tscn"
+boot_splash/image="res://Assets/transparent_1x1.png"
+boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"
 
 [autoload]
 
 Global="*res://Globals/Global.gd"
 GlobalData="*res://Data/GlobalData.gd"
-Network="*res://Network/Network.tscn"
 Logger="*res://Globals/Logger.gd"
+Network="*res://Network/Network.tscn"
 CustomButtons="*res://Globals/CustomButtons.gd"
+Scenes="*res://Globals/Scenes.gd"
+AudioPlayer="*res://Globals/AudioPlayer.tscn"
 
 [display]
 
 window/size/width=1080
 window/size/height=1080
+window/size/fullscreen=true
 window/handheld/orientation="sensor"
 window/stretch/mode="2d"
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/GDScriptMacros/plugin.cfg", "res://addons/Todo_Manager/plugin.cfg", "res://addons/dictionary_inspector/plugin.cfg" )
 
 [global]
 

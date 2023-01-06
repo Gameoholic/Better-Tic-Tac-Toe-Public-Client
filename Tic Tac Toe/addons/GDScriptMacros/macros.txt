@@ -1,0 +1,19 @@
+### How to use: in Godot's Script Editor write a macro and execute it by moving your caret cursor off the line. Press Enter or Right-arrow-key to do this easily without having code completion interfere. Keep in mind if the macro has arguments then you need to match the same number of words for it to execute.
+### Lines that begin with [macro] determine what you must write inside of Godot for the macro to execute (excluding the "[macro]" prefix)
+### Subsequent lines after the [macro] line determine the resulting text that is placed upon executing the macro. This includes blank lines too.
+### In the [macro] line, subsequent words (encased in % if you want) determine the arguments for replacement words in the resulting text. For example; if the macro is "[macro] test %argument57%" but in Godot you write "test hello", all occurences of the resulting text's %argument57% will be replaced with "hello".
+### Create new macros and edit existing ones below.
+###[macro] create
+###var scene = preload('res://scenefilename.tscn')
+###var id = scene.instantiate()
+###id.position = Vector2(x, y)
+###add_child(id)
+###[macro] group
+###for id in get_tree().get_nodes_in_group("group_name"):
+###	id.variable = null
+###[macro] link %arg1%
+###onready var %arg1% = Nodelist.list["%arg1%"]
+[macro] sleep
+yield(get_tree().create_timer(1), "timeout")
+[macro] idle
+yield(get_tree(), "idle_frame")

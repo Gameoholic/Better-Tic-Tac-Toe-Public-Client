@@ -1,12 +1,12 @@
 extends Node
 
-onready var GameServer_ := $"/root/Network/GameServer"
-
 signal cell_click
 signal release_right_click
 signal game_button_click
 
 enum {O, X, Expansion, Empty}
+
+onready var GameServer := $"/root/Network/GameServer"
 
 var map := {} #cell (Vector2), tile (Tile)
 var turn: int = X
@@ -20,39 +20,40 @@ var made_any_move := false
 
 var opponent_name: String
 
-var Game_: WeakRef #Will be set when the Game scene loads
-
 """
 Visual information variables:
 	Will be used to update the Game scene with data such as outlines, tiles and text when loaded and hosting the game that the game container belongs to.
+	The Game scene is the "visual representation" of the GameContainer. There can be multiple GameContainers, only one Game scene.
 """
-
-#In future: may need to add opponent name as well. TODO because it isnt addeda lready
 
 var outline_center_cells := [] #Contains ALL center cells (Vector2) that define outlines for this specific gamer container
 var top_text: String = ""
 var bottom_text: String = "X: " + str(x_expansions) + "\nO: " + str(o_expansions)
 var game_button_text: String = "..."
+var expansion_button_text: String = "EXPAND\n2 available"
 var top_timer_text: String = ""
 var bottom_timer_text: String = ""
+var opponent_name_text: String = ""
 
 
 func confirm_connection() -> void:
 	rpc_id(1, "confirm_connection")
 
 remote func send_game_data(data: Dictionary) -> void:
-	Logger.log("Sending game data to server: " + str(data))
+	Logger.log("Sending game data to server: " + str(data) + ".")
 	rpc_id(1, "receive_game_data", data)
 	
 remote func receive_game_data(data: Dictionary) -> void:
-	Logger.log("Received game data from server: " + str(data))
+	Logger.log("Received game data from server: " + str(data) + ".")
 	if (data.has("server_mark")):
 		set_mark(data["server_mark"])
 	if (data.has("server_turn")):
 		set_turn(data["server_turn"])
 	if (data.has("server_tile")):
+		AudioPlayer.play_sound("place")
 		set_tile(data["server_tile"][0], data["server_tile"][1]) #Cell, Mark
 	if (data.has("server_expansion")):
+		AudioPlayer.play_sound("expansion")
 		set_expansion(data["server_expansion"])
 	if (data.has("server_add_expansions")):
 		add_expansions(data["server_add_expansions"][0], data["server_add_expansions"][1]) #No. of Expansions, Mark
@@ -76,44 +77,71 @@ func _process(delta: float) -> void:
 	visual_set_timer("timer2", $Timer2.time_left)
 
 func visual_add_outline(center_cell: Vector2) -> void:
-	if (has_node("/root/Game/Grid/Outline")):
-		var Outline_: Node = get_node("/root/Game/Grid/Outline")
-		Outline_.add_center_cell(center_cell)
-		Outline_.update()
+	if (Scenes.current_scene.name == "Game" and Scenes.Game.has_node("Main/Camera/Grid/Outline")):
+		var Outline: Node = Scenes.Game.Outline
+		Outline.add_center_cell(center_cell)
+		Outline.update()
 	outline_center_cells.append(center_cell)
 func visual_add_tile(tile: Dictionary) -> void:
-	if (has_node("/root/Game/Grid/Tiles")):
-		var Tiles_: Node = get_node("/root/Game/Grid/Tiles")
-		Tiles_.set_cell(tile.x, tile.y, tile.id)
+	if (Scenes.current_scene.name == "Game" and Scenes.Game.has_node("Main/Camera/Grid/Tiles")):
+		var Tiles: Node = Scenes.Game.Tiles
+		Tiles.set_cell(tile.x, tile.y, tile.id)
 func visual_set_text(node_name: String, value: String) -> void:
 	if (node_name == "top_text"):
-		if (has_node("/root/Game/GUI/GUI/TopText/Text")):
-			var top_text_node: Node = $"/root/Game/GUI/GUI/TopText/Text"
+		if (Scenes.current_scene.name == "Game" and Scenes.Game.has_node("GUI/GUI/TopText/Text")):		
+			var top_text_node: Node = Scenes.Game.get_node("GUI/GUI/TopText/Text")
 			top_text_node.text = value
 		top_text = value
 	elif (node_name == "bottom_text"):
-		if (has_node("/root/Game/GUI/GUI/BottomText/Text")):
-			var bottom_text_node: Node = $"/root/Game/GUI/GUI/BottomText/Text"
+		if (Scenes.current_scene.name == "Game" and Scenes.Game.has_node("GUI/GUI/BottomText/Text")):				
+			var bottom_text_node: Node = Scenes.Game.get_node("GUI/GUI/BottomText/Text")
 			bottom_text_node.text = value
 		bottom_text = value
 	elif (node_name == "game_button_text"):
-		if (has_node("/root/Game/GUI/GUI/GameButton/Text")):
-			var game_button_text_node: Node = $"/root/Game/GUI/GUI/GameButton/Text"
+		if (Scenes.current_scene.name == "Game" and Scenes.Game.has_node("GUI/GUI/GameButton/Text")):						
+			var game_button_text_node: Node = Scenes.Game.get_node("GUI/GUI/GameButton/Text")
 			game_button_text_node.text = value
 		game_button_text = value
+	elif (node_name == "expansion_button_text"):
+		if (Scenes.current_scene.name == "Game" and Scenes.Game.has_node("GUI/GUI/ExpansionButton/Text")):						
+			var expansion_button_text_node: Node = Scenes.Game.get_node("GUI/GUI/ExpansionButton/Text")
+			expansion_button_text_node.text = value
+		expansion_button_text = value
+	elif (node_name == "opponent_name"):
+		if (Scenes.current_scene.name == "Game" and Scenes.Game.has_node("GUI/GUI/OpponentName")):						
+			var opponent_name_text_node: Node = Scenes.Game.get_node("GUI/GUI/OpponentName")
+			opponent_name_text_node.text = value
+		opponent_name_text = value
+		
 func visual_set_timer(timer_name: String, seconds: float):
 	var timer_text: String = "%02d:%02d" % [int(seconds)/60, int(seconds)%60]
 	#timer1 - X, timer2 - O
 	if ((timer_name == "timer1" and mark == X) || (timer_name == "timer2" and mark == O)):
-		if (has_node("/root/Game/GUI/GUI/Timers/TopTimer/TextureRect/TimeIndicator")):
-			var top_timer_text_node: Node = $"/root/Game/GUI/GUI/Timers/TopTimer/TextureRect/TimeIndicator"
+		if (Scenes.current_scene.name == "Game" and Scenes.Game.has_node("GUI/GUI/Timers/TopTimer/TextureRect/TimeIndicator")):								
+			var top_timer_text_node: Node = Scenes.Game.get_node("GUI/GUI/Timers/TopTimer/TextureRect/TimeIndicator")
 			top_timer_text_node.text = timer_text
 		top_timer_text = timer_text
 	elif ((timer_name == "timer1" and mark == O) || (timer_name == "timer2" and mark == X)):
-		if (has_node("/root/Game/GUI/GUI/Timers/BottomTimer/TextureRect/TimeIndicator")):
-			var bottom_timer_text_node: Node = $"/root/Game/GUI/GUI/Timers/BottomTimer/TextureRect/TimeIndicator"
+		if (Scenes.current_scene.name == "Game" and Scenes.Game.has_node("GUI/GUI/Timers/BottomTimer/TextureRect/TimeIndicator")):										
+			var bottom_timer_text_node: Node = Scenes.Game.get_node("GUI/GUI/Timers/BottomTimer/TextureRect/TimeIndicator")
 			bottom_timer_text_node.text = timer_text
 		bottom_timer_text = timer_text
+
+func visual_update_expansion_button() -> void:
+	var your_expansions: int = x_expansions
+	if (mark == O):
+		your_expansions = o_expansions
+	if (Scenes.current_scene.name == "Game"):
+		var tile_texture_node: NinePatchRect = Scenes.Game.get_node("GUI/GUI/TileDisplay/TileTexture")
+		match Scenes.Game.cell_selection_mode:
+			"tile":
+				tile_texture_node.region_rect.position = Vector2(1, 1)
+				if (mark == X):
+					tile_texture_node.region_rect.position = Vector2(1, 66)
+				visual_set_text("expansion_button_text", "EXPAND\n" + str(your_expansions) + " available")
+			"expansion":
+				tile_texture_node.region_rect.position = Vector2(1, 130)
+				visual_set_text("expansion_button_text", "EXPANDING\n" + str(your_expansions) + " available")
 
 """
 Server methods:
@@ -124,8 +152,7 @@ func set_mark(receieved_mark: int) -> void:
 	var mark_string := "X"
 	if (mark == O):
 		mark_string = "O"
-	$"/root/Game/GUI/GUI/OpponentName".text = "Opponent: " + opponent_name + "\nYou're " + mark_string #TODO: don't do it like this, use visual update method
-	
+	visual_set_text("opponent_name", "Opponent: " + opponent_name + "\nYou're " + mark_string)
 	
 func set_turn(receieved_turn: int) -> void:
 	turn = receieved_turn
@@ -135,6 +162,7 @@ func set_turn(receieved_turn: int) -> void:
 		visual_set_text("top_text", "O TURN")
 	if (turn == mark):
 		visual_set_text("game_button_text", "Skip\nTurn")
+		AudioPlayer.play_sound("your_turn")
 	else:
 		visual_set_text("game_button_text", "...")
 
@@ -153,6 +181,7 @@ func add_expansions(expansions: int, mark: int) -> void:
 		x_expansions += expansions
 	else:
 		o_expansions += expansions
+	visual_update_expansion_button()
 	visual_set_text("bottom_text", "X: " + str(x_expansions) + "\nO: " + str(o_expansions))
 
 func set_timer1(timer_data: Dictionary) -> void:
@@ -168,24 +197,29 @@ func set_timer2(timer_data: Dictionary) -> void:
 func victory() -> void:
 	$Timer1.set_paused(true)
 	$Timer2.set_paused(true)
-	if (has_node("/root/Game/GUI/GUI")):
+	if (winner_mark == mark):
+		AudioPlayer.play_sound("win")
+	else:
+		AudioPlayer.play_sound("lose")
+	if (Scenes.Game.has_node("GUI/GUI")):											
 		if (winner_mark == X):
-			get_node("/root/Game/GUI/GUI").show_victory_GUI("X")
+			Scenes.Game.get_node("GUI/GUI").show_victory_GUI("X")
 		else:
-			get_node("/root/Game/GUI/GUI").show_victory_GUI("O")
+			Scenes.Game.get_node("GUI/GUI").show_victory_GUI("O")
 """
-Normal methods:
+Game methods:
 """
 func _ready() -> void:
 	generate_grid_around_center(Vector2(0, 0))
-	
 
 #Signal-function: cell_clicked. Fired when a cell is clicked.
 func _on_GameContainer_cell_click(clicked_cell: Vector2) -> void:
 	made_any_move = true
 	place_tile(clicked_cell, mark, false, true)
+	AudioPlayer.play_sound("place")
 	var server_data = {"tile": clicked_cell}
 	if (expansions == 0):
+		AudioPlayer.play_sound("end_turn")
 		end_turn()
 		server_data["end_turn"] = true
 	else:
@@ -207,8 +241,10 @@ func _on_GameContainer_release_right_click(expansion_data: Dictionary) -> void:
 		server_data["end_turn"] = true
 	else:
 		visual_set_text("game_button_text", "End\nTurn")
+	visual_update_expansion_button()
 	visual_set_text("bottom_text", "X: " + str(x_expansions) + "\nO: " + str(o_expansions))
-	GameServer_.game_container.send_game_data(server_data)
+	AudioPlayer.play_sound("expansion")
+	send_game_data(server_data)
 	
 #Signal-function: game_button_click. Fired when the game button is clicked
 func _on_GameContainer_game_button_click() -> void:
@@ -217,6 +253,7 @@ func _on_GameContainer_game_button_click() -> void:
 	if (made_any_move):
 		end_turn()
 		server_data["end_turn"] = true
+		AudioPlayer.play_sound("end_turn")
 	#Skip Turn:
 	else:
 		if (only_one_empty_cell_left() || expansions == 3): #Can't skip turn under these conditions
@@ -228,6 +265,7 @@ func _on_GameContainer_game_button_click() -> void:
 			o_expansions += 1
 		end_turn()
 		server_data["skip_turn"] = true
+		AudioPlayer.play_sound("skip_turn")
 	send_game_data(server_data)
 	
 #Places a tile and adds it to the map
@@ -239,8 +277,10 @@ func place_tile(pos: Vector2, id: int, is_center_of_local_grid: bool = false, ch
 		is_center_of_local_grid = true
 	var tile: Tile = Tile.new(id, is_center_of_local_grid)
 	map[pos] = tile
-	if (Game_ != null && Game_.get_ref()): #If the Game_ object exists and the Game scene is loaded:
-		Game_.get_ref().expansion_data[pos] = tile.to_dictionary() #If the tile is part of an expansion, it will be used in expansion_data, if it is not, this line can be safely ignored.
+	if (Scenes.current_scene.name == "Game"):
+		Scenes.Game.expansion_data[pos] = tile.to_dictionary() #If the tile is part of an expansion, it will be used in expansion_data, if it is not, this line can be safely ignored.
+#	if (Game_ != null && Game_.get_ref()): #If the Game_ object exists and the Game scene is loaded:
+#		Game_.get_ref().expansion_data[pos] = tile.to_dictionary() #If the tile is part of an expansion, it will be used in expansion_data, if it is not, this line can be safely ignored.
 	if (check_for_victory):
 		check_for_victory(pos, id)
 
@@ -249,7 +289,7 @@ func place_tiles(tiles: Dictionary):
 	for tile_position in tiles.keys():
 		place_tile(tile_position, tiles[tile_position].id, tiles[tile_position].is_center_of_local_grid)
 
-func end_turn():
+func end_turn() -> void:
 	if (game_ended):
 		return
 	if (turn == X):
@@ -262,6 +302,8 @@ func end_turn():
 		visual_set_text("top_text", "X TURN")
 	else:
 		visual_set_text("top_text", "O TURN")
+	Scenes.Game.cell_selection_mode = "tile"
+	visual_update_expansion_button()
 	visual_set_text("bottom_text", "X: " + str(x_expansions) + "\nO: " + str(o_expansions))
 
 #Generates a grid around a center tile. This accounts for already placed tiles.

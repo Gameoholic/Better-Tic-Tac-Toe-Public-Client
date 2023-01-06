@@ -1,21 +1,18 @@
 extends Node
 
 enum {O, X, Expansion, Empty}
-enum {Top, Bottom, Left, Right, TopLeft, TopRight, BottomLeft, BottomRight}
 
-onready var GameServer_ := $"/root/Network/GameServer"
-onready var Game_: Node = get_node("/root/Game")
-onready var Tiles_: Node = get_node("/root/Game/Grid/Tiles")
-onready var TilesPreview_: Node = get_node("/root/Game/Grid/TilesPreview")
-onready var Outline_: Node = get_node("/root/Game/Grid/Outline")
-onready var Camera_: Node = get_node("/root/Game/Main/Camera")
-
+onready var GameServer := $"/root/Network/GameServer"
+onready var Outline: Node = Scenes.Game.get_node("Main/Camera/Grid/Outline")
+onready var Tiles: Node = Scenes.Game.get_node("Main/Camera/Grid/Tiles")
+onready var TilesPreview: Node = Scenes.Game.get_node("Main/Camera/Grid/TilesPreview")
+onready var CameraNode: Node = Scenes.Game.get_node("Main/Camera")
 	
 #Returns whether the tile exists and is a center
 func check_tile_for_center(pos: Vector2) -> bool:
-	if (!GameServer_.game_container.map.has(pos)):
+	if (!GameServer.game_container.map.has(pos)):
 		return false
-	if (GameServer_.game_container.map[pos].is_center_of_local_grid):
+	if (GameServer.game_container.map[pos].is_center_of_local_grid):
 		return true
 	return false
 	
@@ -30,7 +27,7 @@ func get_generated_grid_tiles(center: Vector2) -> Dictionary:
 	for i in range(-1 + center.x, 2 + center.x, 1):
 		for j in range(-1 + center.y, 2 + center.y, 1):
 			var pos = Vector2(i, j)
-			if (!GameServer_.game_container.map.has(pos)):
+			if (!GameServer.game_container.map.has(pos)):
 				var tile: Tile
 				#If the tile is in the center of the new grid:
 				if (pos == center):
@@ -51,7 +48,7 @@ func get_possible_expansions(expansion_pos: Vector2) -> Dictionary:
 	var adjacent_center_directions: Array = get_adjacent_center_tiles(expansion_pos)
 	
 	#If the expansion is in the center of a grid:
-	if (GameServer_.game_container.map.has(expansion_pos) and GameServer_.game_container.map[expansion_pos].is_center_of_local_grid):
+	if (GameServer.game_container.map.has(expansion_pos) and GameServer.game_container.map[expansion_pos].is_center_of_local_grid):
 		possible_expansions["Center"] = {}
 	
 	for adjacent_center_direction in adjacent_center_directions:
@@ -102,34 +99,34 @@ func get_adjacent_center_tiles(pos: Vector2) -> Array:
 
 #Runs when player releases right click on a cell
 func place_expansion() -> void:
-	Game_.in_expansion_selection = false
-	GameServer_.game_container.place_tile(Game_.origin_expansion_cell, Expansion)
-	GameServer_.game_container.place_tiles(Game_.possible_expansions[Game_.current_expansion_direction])
+	Scenes.Game.in_expansion_selection = false
+	GameServer.game_container.place_tile(Scenes.Game.origin_expansion_cell, Expansion)
+	GameServer.game_container.place_tiles(Scenes.Game.possible_expansions[Scenes.Game.current_expansion_direction])
 
-	for possible_expansion_cell in Game_.possible_expansions[Game_.current_expansion_direction]:
-		if (Game_.possible_expansions[Game_.current_expansion_direction][possible_expansion_cell].is_center_of_local_grid):
-			GameServer_.game_container.visual_add_outline(possible_expansion_cell)
+	for possible_expansion_cell in Scenes.Game.possible_expansions[Scenes.Game.current_expansion_direction]:
+		if (Scenes.Game.possible_expansions[Scenes.Game.current_expansion_direction][possible_expansion_cell].is_center_of_local_grid):
+			GameServer.game_container.visual_add_outline(possible_expansion_cell)
 		
-	TilesPreview_.clear()
+	TilesPreview.clear()
 
 #Runs when player holds right click on a cell
 func preview_expansion_first_time(clicked_cell: Vector2) -> void:
-	Game_.in_expansion_selection = true
-	Game_.origin_expansion_cell = clicked_cell
-	Game_.origin_mouse_coords = get_viewport().get_mouse_position()
-	Game_.possible_expansions = get_possible_expansions(Game_.origin_expansion_cell)
-	Game_.current_expansion_direction = Game_.possible_expansions.keys()[0]
+	Scenes.Game.in_expansion_selection = true
+	Scenes.Game.origin_expansion_cell = clicked_cell
+	Scenes.Game.origin_mouse_coords = get_viewport().get_mouse_position()
+	Scenes.Game.possible_expansions = get_possible_expansions(Scenes.Game.origin_expansion_cell)
+	Scenes.Game.current_expansion_direction = Scenes.Game.possible_expansions.keys()[0]
 	#Show preview of expansion:
-	TilesPreview_.set_cell(Game_.origin_expansion_cell.x, Game_.origin_expansion_cell.y, Expansion)
-	for possible_expansion_pos in Game_.possible_expansions.values()[0]:
+	TilesPreview.set_cell(Scenes.Game.origin_expansion_cell.x, Scenes.Game.origin_expansion_cell.y, Expansion)
+	for possible_expansion_pos in Scenes.Game.possible_expansions.values()[0]:
 		var tile_pos = Vector2(possible_expansion_pos.x, possible_expansion_pos.y)
-		TilesPreview_.set_cell(tile_pos.x, tile_pos.y, Empty)
+		TilesPreview.set_cell(tile_pos.x, tile_pos.y, Empty)
 
 func preview_expansion() -> void:
-	var original_mouse_pos: Vector2 = Game_.origin_mouse_coords
+	var original_mouse_pos: Vector2 = Scenes.Game.origin_mouse_coords
 	var current_mouse_pos: Vector2 = get_viewport().get_mouse_position()
-	var cell_size: Vector2 = Tiles_.cell_size
-	var expansion_cell: Vector2 = Tiles_.world_to_map(current_mouse_pos + Camera_.position)
+	var cell_size: Vector2 = Tiles.cell_size
+	var expansion_cell: Vector2 = Tiles.world_to_map(current_mouse_pos + CameraNode.position)
 	var expansion_cell_pos = Vector2(int(original_mouse_pos.x / 64) * 64, int(original_mouse_pos.y / 64) * 64)
 	var expansion_center_pos = Vector2(expansion_cell_pos.x + cell_size.x / 2, expansion_cell_pos.y + cell_size.y / 2) #Center of expansion cell
 	
@@ -181,14 +178,14 @@ func preview_expansion() -> void:
 	
 #		print(quadrant)
 #		print(direction)
-	if (Game_.possible_expansions.has(direction)):
-		Game_.current_expansion_direction = direction
+	if (Scenes.Game.possible_expansions.has(direction)):
+		Scenes.Game.current_expansion_direction = direction
 	
 	#Show preview of expansion:
-	if (Game_.possible_expansions.has(direction)):
-		TilesPreview_.clear()
-		TilesPreview_.set_cell(Game_.origin_expansion_cell.x, Game_.origin_expansion_cell.y, Expansion)
-		for possible_expansion_pos in Game_.possible_expansions[direction]:
+	if (Scenes.Game.possible_expansions.has(direction)):
+		TilesPreview.clear()
+		TilesPreview.set_cell(Scenes.Game.origin_expansion_cell.x, Scenes.Game.origin_expansion_cell.y, Expansion)
+		for possible_expansion_pos in Scenes.Game.possible_expansions[direction]:
 			var tile_pos = Vector2(possible_expansion_pos.x, possible_expansion_pos.y)
-			TilesPreview_.set_cell(tile_pos.x, tile_pos.y, Empty)
+			TilesPreview.set_cell(tile_pos.x, tile_pos.y, Empty)
 	

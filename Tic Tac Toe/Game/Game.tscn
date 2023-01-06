@@ -91,10 +91,6 @@
 [node name="Game" type="Node"]
 script = ExtResource( 6 )
 
-[node name="GUI" type="CanvasLayer" parent="."]
-
-[node name="GUI" parent="GUI" instance=ExtResource( 3 )]
-
 [node name="Main" type="Node" parent="."]
 
 [node name="Expansions" type="Node" parent="Main"]
@@ -105,21 +101,55 @@ anchor_mode = 0
 current = true
 script = ExtResource( 5 )
 
-[node name="Grid" type="Node" parent="."]
+[node name="Grid" type="Node" parent="Main/Camera"]
 
-[node name="Tiles" type="TileMap" parent="Grid"]
+[node name="Tiles" type="TileMap" parent="Main/Camera/Grid"]
 tile_set = SubResource( 1 )
 format = 1
 script = ExtResource( 4 )
 
-[node name="TilesPreview" type="TileMap" parent="Grid"]
+[node name="TilesPreview" type="TileMap" parent="Main/Camera/Grid"]
 tile_set = SubResource( 1 )
 format = 1
 script = ExtResource( 2 )
 
-[node name="Outline" type="Node2D" parent="Grid"]
+[node name="Outline" type="Node2D" parent="Main/Camera/Grid"]
 script = ExtResource( 7 )
+
+[node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="GUI" parent="GUI" instance=ExtResource( 3 )]
+
+[node name="ErrorCanvas" type="CanvasLayer" parent="."]
+layer = 6
+
+[node name="Tint" type="ColorRect" parent="ErrorCanvas"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.921569 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ErrorText" type="AcceptDialog" parent="ErrorCanvas"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -41.5
+margin_top = -29.0
+margin_right = 124.5
+margin_bottom = 87.0
+rect_min_size = Vector2( 166, 116 )
+popup_exclusive = true
+window_title = ""
+dialog_autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="button_clicked" from="." to="." method="_on_Game_button_clicked"]
 [connection signal="cell_clicked" from="." to="." method="_on_Game_cell_clicked"]
 [connection signal="cell_right_clicked" from="." to="." method="_on_Game_cell_right_clicked"]
+[connection signal="confirmed" from="ErrorCanvas/ErrorText" to="." method="_on_ErrorText_confirmed"]

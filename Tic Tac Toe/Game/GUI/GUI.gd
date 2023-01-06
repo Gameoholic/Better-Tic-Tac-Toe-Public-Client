@@ -1,19 +1,26 @@
 extends Node2D
 
-onready var Game_: Node = get_node("/root/Game")
+onready var GameServer := $"/root/Network/GameServer"
+
+enum {O, X, Expansion, Empty}
 
 func show_victory_GUI(mark: String) -> void:
 	$"VictoryGUI/Main/VictoryRect/Text".text = str(mark) + " won!"
 	$"VictoryGUI/Main".visible = true
-	$"VictoryGUI/GoBack".visible = false
-#GameButton:
-func _on_Button_pressed() -> void:
-	Game_.emit_signal("button_clicked")
 
+func _on_GameButton_pressed() -> void:
+	Scenes.Game.emit_signal("button_clicked")
+
+func _on_ExpansionButton_pressed():
+	match Scenes.Game.cell_selection_mode:
+		"tile":
+			Scenes.Game.cell_selection_mode = "expansion"
+		"expansion":
+			Scenes.Game.cell_selection_mode = "tile"
+	GameServer.game_container.visual_update_expansion_button()
+	
 func _on_GoBackButton_pressed() -> void:
-	CustomButtons.enable()
-	get_tree().change_scene("res://Menus/MainMenu/MainMenu.tscn")
+	Scenes.change_scene(Scenes.MainMenu_path)
 
-func _on_CloseButton_pressed() -> void:
-	$"VictoryGUI/Main".visible = false
-	$"VictoryGUI/GoBack".visible = true
+
+

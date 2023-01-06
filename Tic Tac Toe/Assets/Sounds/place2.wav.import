@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/place2.wav-1bf829a45cb046431556ff2a3a67e97b.sample"
+
+[deps]
+
+source_file="res://Assets/Sounds/place2.wav"
+dest_files=[ "res://.import/place2.wav-1bf829a45cb046431556ff2a3a67e97b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
