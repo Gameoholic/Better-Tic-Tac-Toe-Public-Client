@@ -106,7 +106,9 @@ func place_expansion() -> void:
 	for possible_expansion_cell in Scenes.Game.possible_expansions[Scenes.Game.current_expansion_direction]:
 		if (Scenes.Game.possible_expansions[Scenes.Game.current_expansion_direction][possible_expansion_cell].is_center_of_local_grid):
 			GameServer.game_container.visual_add_outline(possible_expansion_cell)
-		
+	
+	var cancel_button: NinePatchRect = Scenes.Game.get_node("GUI/GUI/CancelDisplay")
+	cancel_button.visible = false
 	TilesPreview.clear()
 
 #Runs when player holds right click on a cell
@@ -121,6 +123,9 @@ func preview_expansion_first_time(clicked_cell: Vector2) -> void:
 	for possible_expansion_pos in Scenes.Game.possible_expansions.values()[0]:
 		var tile_pos = Vector2(possible_expansion_pos.x, possible_expansion_pos.y)
 		TilesPreview.set_cell(tile_pos.x, tile_pos.y, Empty)
+	
+	var cancel_button: NinePatchRect = Scenes.Game.get_node("GUI/GUI/CancelDisplay")
+	cancel_button.visible = true
 
 func preview_expansion() -> void:
 	var original_mouse_pos: Vector2 = Scenes.Game.origin_mouse_coords

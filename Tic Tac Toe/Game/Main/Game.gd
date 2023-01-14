@@ -91,15 +91,29 @@ func _on_Game_cell_right_clicked(clicked_cell: Vector2, released: bool):
 	#If the player is holding right click:
 	if (!released):
 		Expansions.preview_expansion_first_time(clicked_cell)
-	#If the player released right click, place the expansion
+	#If the player released right click:
 	elif (in_expansion_selection):
-		var origin_expansion_cell: Vector2
-		expansion_data.clear()
-		Expansions.place_expansion() #This updates expansion_data with the new expansion tiles
-		for pos in expansion_data:
-			if (expansion_data[pos].id == Expansion):
-				origin_expansion_cell = pos
-		GameServer.game_container.emit_signal("release_right_click", {"cell": origin_expansion_cell, "direction": current_expansion_direction})
+		var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+		var cancel_button: NinePatchRect = Scenes.Game.get_node("GUI/GUI/CancelDisplay")
+		var cancel_pos: Vector2 = cancel_button.get_global_transform_with_canvas().get_origin()
+		var cancel_size = cancel_button.rect_size * cancel_button.get_global_transform_with_canvas().get_scale()
+		
+		#If released on Cancel button:
+		if (mouse_pos.x > cancel_pos.x and mouse_pos.x < (cancel_pos.x + cancel_size.x) and mouse_pos.y > cancel_pos.y and mouse_pos.y < (cancel_pos.y + cancel_size.y)):
+			Scenes.Game.in_expansion_selection = false
+			TilesPreview.clear()
+			expansion_data.clear()
+			cancel_button.visible = false
+		
+		#Otherwise, place the expansion:
+		else:
+			var origin_expansion_cell: Vector2
+			expansion_data.clear()
+			Expansions.place_expansion() #This updates expansion_data with the new expansion tiles
+			for pos in expansion_data:
+				if (expansion_data[pos].id == Expansion):
+					origin_expansion_cell = pos
+			GameServer.game_container.emit_signal("release_right_click", {"cell": origin_expansion_cell, "direction": current_expansion_direction})
 
 #On Skip/End Turn Button Clicked
 func _on_Game_button_clicked() -> void:

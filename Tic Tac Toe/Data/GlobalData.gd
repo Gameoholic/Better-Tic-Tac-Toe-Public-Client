@@ -1,7 +1,8 @@
 extends Node
 
-const version := "0.3.0"
+const version := "0.3.1"
 var latest_version := "" #Will be "" unless there's a newer version available
+#const connection_ip := "127.0.0.1"
 const connection_ip := "78.47.101.58"
 const connection_port := 1918
 var displayname: String
@@ -14,6 +15,8 @@ var username: String
 var auth_token: String
 #Preferences:
 var game_mode_pref: String
+#Testing:
+var test_music: bool
 
 func _ready() -> void:
 	#Check if required files exist, if not, create them:
@@ -39,6 +42,8 @@ func _ready() -> void:
 		data_file_contents["f11"] = true
 	if (!data_file_contents.has("mode")):
 		data_file_contents["mode"] = "classic"
+	if (!data_file_contents.has("test_music")):
+		data_file_contents["test_music"] = false
 	#Remove old, unneeded arguments created by old versions:
 	data_file_contents.erase("version")
 	data_file_contents.erase("connection_ip")
@@ -68,11 +73,13 @@ func _ready() -> void:
 	login_data_file.store_line(JSON.print(login_data_file_contents, "\t"))
 	login_data_file.close()
 	#Read data from files:
+	
 	#Data file:
 	data_file.open("user://Data/data.json", File.READ)
 	data_file_contents = JSON.parse(data_file.get_as_text()).result
 	OS.window_fullscreen = data_file_contents["f11"]
 	game_mode_pref = data_file_contents["mode"]
+	test_music = data_file_contents["test_music"]
 	data_file.close()
 	
 	#Login data file:
@@ -81,6 +88,7 @@ func _ready() -> void:
 	username = login_data_file_contents.username
 	auth_token = login_data_file_contents.auth_token
 	login_data_file.close()
+	
 	#Read inappropriate words file:
 	var inappropriate_words_file := File.new()
 	inappropriate_words_file.open("res://Data/inappropriate_words.txt", File.READ)

@@ -15,9 +15,8 @@ var current_scene: Node setget ,get_current_scene
 
 var transferred_scene_data: Dictionary = {"first_run": true} #has element first_run during first run of default scene
 var changing_scenes := false
+var transition_overlay: ColorRect
 var fade_in: bool
-
-
 	
 func change_scene(path: String, scene_data: Dictionary = {}, local_fade_in: bool = true) -> void:
 	CustomButtons.disable()
@@ -27,7 +26,7 @@ func change_scene(path: String, scene_data: Dictionary = {}, local_fade_in: bool
 	current_scene = get_tree().current_scene
 	
 	#Fade out anim:
-	var transition_overlay := ColorRect.new()
+	transition_overlay = ColorRect.new()
 	var transition_tween := Tween.new()
 	if (current_scene.name == "Game"):
 		current_scene.get_node("GUI").add_child(transition_overlay)
@@ -38,13 +37,14 @@ func change_scene(path: String, scene_data: Dictionary = {}, local_fade_in: bool
 	else:	
 		current_scene.add_child(transition_overlay)
 	transition_overlay.mouse_filter = Control.MOUSE_FILTER_STOP	
-	transition_overlay.rect_size = OS.get_real_window_size()
 	transition_overlay.color = Color(0, 0, 0, 0)
+	transition_overlay.set_anchors_and_margins_preset(Control.PRESET_WIDE)
 	current_scene.add_child(transition_tween)
 	transition_tween.interpolate_property(transition_overlay, "color", transition_overlay.color, Color(0, 0, 0, 1), 0.5, transition_tween.TRANS_CUBIC, transition_tween.EASE_OUT)
 	transition_tween.start()
-	yield(get_tree().create_timer(0.5), "timeout")
 	
+	yield(get_tree().create_timer(0.5), "timeout")
+
 	current_scene.clean_up_scene()
 	if (!current_scene.cleaned_up):
 		yield(current_scene, "scene_cleaned_up")
@@ -57,7 +57,7 @@ func on_scene_loaded() -> void: #Called by new scene when it is ready
 	
 	#Fade in anim:
 	if (fade_in):
-		var transition_overlay := ColorRect.new()
+		var transition_overlay = ColorRect.new()
 		var transition_tween := Tween.new()
 		if (current_scene.name == "Game"):
 			current_scene.get_node("GUI").add_child(transition_overlay)
@@ -68,11 +68,12 @@ func on_scene_loaded() -> void: #Called by new scene when it is ready
 		else:	
 			current_scene.add_child(transition_overlay)
 		transition_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		transition_overlay.rect_size = OS.get_real_window_size()
 		transition_overlay.color = Color(0, 0, 0, 1)
+		transition_overlay.set_anchors_and_margins_preset(Control.PRESET_WIDE)		
 		current_scene.add_child(transition_tween)
 		transition_tween.interpolate_property(transition_overlay, "color", transition_overlay.color, Color(0, 0, 0, 0), 0.5, transition_tween.TRANS_CUBIC, transition_tween.EASE_IN)
 		transition_tween.start()
+		
 	changing_scenes = false	
 
 func get_current_scene() -> Node:

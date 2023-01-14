@@ -195,6 +195,10 @@ func set_timer2(timer_data: Dictionary) -> void:
 	visual_set_timer("timer2", timer_data.seconds)
 	
 func victory() -> void:
+	#If for some reason not connected to game:
+	if (Scenes.current_scene.name != "Game"):
+		Logger.error("Game ended but not connected to it!", Logger.ERROR)
+		return
 	$Timer1.set_paused(true)
 	$Timer2.set_paused(true)
 	if (winner_mark == mark):

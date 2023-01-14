@@ -44,7 +44,7 @@ func clean_up_scene() -> void: #Ran right before the scene is switched - blockin
 	cleaned_up = true
 	emit_signal("scene_cleaned_up")
 	
-func _ready():	
+func _ready():
 	var scene_data: Dictionary = Scenes.transferred_scene_data
 	Scenes.on_scene_loaded()
 	CustomButtons.enable()
@@ -152,7 +152,6 @@ func display_error(error_text: String) -> void:
 		if ("\n" in splash_text.text):
 			$"LoadingInfo/SplashText/Retry".rect_position.y += 14 * splash_text.text.count("\n")
 		$"LoadingInfo/SplashText/Retry".visible = true
-		return
 		AudioPlayer.play_sound("expansion")
 	elif (phase == PhaseType.ACCOUNT_REGISTRATION):
 		prompt_text.text = "Welcome to Better Tic Tac Toe!\nPlease pick a username for yourself."
@@ -196,7 +195,7 @@ func _on_Proceed_button_released():
 		return
 	for inappropriate_word in GlobalData.inappropriate_words:
 		error_text.visible = true
-		if (inappropriate_word in username_input.text):
+		if (inappropriate_word in username_input.text.to_lower()):
 			error_text.text = "Please provide an appropriate username."
 			return
 	if (!username_confirmed):

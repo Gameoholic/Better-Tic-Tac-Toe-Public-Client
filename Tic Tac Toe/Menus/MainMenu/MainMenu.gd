@@ -89,15 +89,17 @@ func _ready() -> void:
 		error_text_dialog.dialog_text = "You're already logged in from another device, we've disconnected them."
 		error_text_source = "logged_into_warning"
 		error_text_dialog.show()
-	if (scene_data["created_new_account"] == true):
+	if (scene_data.has("created_new_account") && scene_data["created_new_account"] == true):
 		CustomButtons.disable()
 		enable_buttons = false
 		tint.visible = true
-		error_text_dialog.dialog_text = "Would you like to create an account to save your progress?"
-		error_text_dialog.add_button("NO", true, "no")
-		error_text_source = "create_account_suggestion"
-		error_text_dialog.show()
+		$"%CreateAccountSuggestion".dialog_text = "Would you like to create an account to save your progress?"
+		$"%CreateAccountSuggestion".add_button("NO", true, "no")
+		$"%CreateAccountSuggestion".show()
 	CustomButtons.set_enabled(enable_buttons)
+	
+	if (GlobalData.test_music):
+		AudioPlayer.play_sound("main_menu_music")
 	
 
 func clean_up_scene() -> void: #Ran right before the scene is switched - blocking
@@ -115,6 +117,7 @@ func on_game_found() -> void:
 	$"CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Play/Label".text = "Loading..."
 	$"CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Play".disabled = true
 	$"CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Play".texture_disabled = t_menu_button_gray_pressed
+	CustomButtons.disable()
 
 
 #--------------------------------Button Signals--------------------------------:
@@ -332,7 +335,7 @@ func _on_Blitz_mouse_stop_hover() -> void:
 
 func _on_Bullet_mouse_hover() -> void:
 	mode_buttons_tween.stop_all()	
-	mode_description.get_node("Label").text = "30 seconds each\n(0.5|0)"
+	mode_description.get_node("Label").text = "30 seconds each\n(0.5|0.5)"
 	mode_buttons_tween.interpolate_property(mode_description, "modulate", mode_description.modulate, Color(1, 1, 1, 1), 0.5, mode_buttons_tween.TRANS_CUBIC, mode_buttons_tween.EASE_OUT)
 	mode_buttons_tween.start()
 
@@ -379,21 +382,22 @@ func _on_ErrorText_confirmed() -> void:
 		"logged_into_warning":
 			CustomButtons.enable()
 			tint.visible = false
-		"create_account_suggestion":
-			$"%NewPasswordContainer".visible = true
-			CustomButtons.enable()
-			CustomButtons.set_enabled_individually_for_all_buttons(false)
-			$"%NewPasswordContainer".get_node("Proceed").enabled = true
 		"gameserver_disconnect":
 			Scenes.change_scene(Scenes.BootScreen_path, {})
 
-func _on_ErrorText_custom_action(action):
+func _on_CreateAccountSuggestion_confirmed():
+	$"%NewPasswordContainer".visible = true
+	CustomButtons.enable()
+	CustomButtons.set_enabled_individually_for_all_buttons(false)
+	$"%NewPasswordContainer".get_node("Proceed").enabled = true
+
+func _on_CreateAccountSuggestion_custom_action(action):
 	if (action == "no"):
-		error_text_dialog.visible = false
+		$"%CreateAccountSuggestion".visible = false
 		$"%NewPasswordContainer".visible = false
 		CustomButtons.enable()
-		tint.visible = false
-	
+		tint.visible = false	
+
 var started := false
 func _on_FriendButton_button_released():
 	if (!started):
@@ -419,3 +423,4 @@ func _on_Proceed_button_released():
 	
 func _on_Proceed_button_left_area():
 	$"%NewPasswordContainer".get_node("Proceed/Label").rect_position.y = 0
+

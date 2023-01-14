@@ -9,7 +9,7 @@ var camera_speed_threshold := 50000
 
 func _ready() -> void:
 	position = Vector2(-350, -350)
-
+	
 func _unhandled_input(event):
 	if (event is InputEventScreenTouch):
 		if (event.pressed):
@@ -25,5 +25,9 @@ func _unhandled_input(event):
 			events[event.index] = event
 			if (events.size() == 1):
 				position += event.relative.rotated(rotation) * zoom.x * -1
+				on_camera_move()
 			
 			
+func on_camera_move() -> void:
+	pass
+		
