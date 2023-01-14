@@ -1,6 +1,6 @@
 extends Node
 
-const version := "0.3.1"
+const version := "0.3.2"
 var latest_version := "" #Will be "" unless there's a newer version available
 #const connection_ip := "127.0.0.1"
 const connection_ip := "78.47.101.58"
@@ -17,6 +17,7 @@ var auth_token: String
 var game_mode_pref: String
 #Testing:
 var test_music: bool
+var temp_music_run_before := false
 
 func _ready() -> void:
 	#Check if required files exist, if not, create them:

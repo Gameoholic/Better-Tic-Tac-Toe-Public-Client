@@ -98,8 +98,9 @@ func _ready() -> void:
 		$"%CreateAccountSuggestion".show()
 	CustomButtons.set_enabled(enable_buttons)
 	
-	if (GlobalData.test_music):
+	if (GlobalData.test_music and !GlobalData.temp_music_run_before):
 		AudioPlayer.play_sound("main_menu_music")
+	GlobalData.temp_music_run_before = true
 	
 
 func clean_up_scene() -> void: #Ran right before the scene is switched - blocking
