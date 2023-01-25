@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Assets/GUI/Comfortaa-Bold.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Assets/GUI/label_HP_bg.png" type="Texture" id=2]
@@ -6,6 +6,9 @@
 [ext_resource path="res://Assets/timer.png" type="Texture" id=4]
 [ext_resource path="res://Assets/sprites.png" type="Texture" id=5]
 [ext_resource path="res://Assets/cancel_expansion.png" type="Texture" id=6]
+[ext_resource path="res://Classes/CustomButton.gd" type="Script" id=7]
+[ext_resource path="res://Assets/menu_button_red_pressed.png" type="Texture" id=8]
+[ext_resource path="res://Assets/menu_button_gray_unpressed.png" type="Texture" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 size = 22
@@ -40,6 +43,11 @@ use_filter = true
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=8]
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 20
 use_filter = true
 font_data = ExtResource( 1 )
 
@@ -252,7 +260,6 @@ margin_bottom = 56.0
 focus_mode = 0
 enabled_focus_mode = 0
 flat = true
-script = SubResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -311,6 +318,30 @@ margin_bottom = 19.0
 custom_fonts/font = SubResource( 8 )
 text = "Cancel"
 align = 1
+
+[node name="Leave" type="TextureButton" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 2.0
+margin_top = 1029.0
+margin_right = 77.0
+margin_bottom = 1079.0
+rect_min_size = Vector2( 75, 50 )
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 8 )
+expand = true
+script = ExtResource( 7 )
+
+[node name="Label" type="Label" parent="Leave"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 9 )
+text = "Leave"
+align = 1
+valign = 1
 
 [node name="VictoryGUI" type="Control" parent="."]
 margin_right = 40.0
@@ -371,4 +402,7 @@ __meta__ = {
 
 [connection signal="pressed" from="GameButton/GameButton" to="." method="_on_GameButton_pressed"]
 [connection signal="pressed" from="ExpansionButton/ExpansionButton" to="." method="_on_ExpansionButton_pressed"]
+[connection signal="button_left_area" from="Leave" to="." method="_on_Leave_button_left_area"]
+[connection signal="button_pressed" from="Leave" to="." method="_on_Leave_button_pressed"]
+[connection signal="button_released" from="Leave" to="." method="_on_Leave_button_released"]
 [connection signal="pressed" from="VictoryGUI/Main/GoBackButton" to="." method="_on_GoBackButton_pressed"]

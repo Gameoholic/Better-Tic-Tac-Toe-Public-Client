@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://Assets/light-gray-background-with-small-sparkles-texture-macro-focus-microtexture_328295-112.webp" type="Texture" id=1]
 [ext_resource path="res://Assets/menu_button_purple_unpressed.png" type="Texture" id=2]
@@ -26,6 +26,8 @@
 [ext_resource path="res://Assets/menu_button_white_pressed.png" type="Texture" id=24]
 [ext_resource path="res://Assets/menu_button_white_unpressed.png" type="Texture" id=25]
 [ext_resource path="res://Menus/MainMenu/Password.gd" type="Script" id=26]
+[ext_resource path="res://Assets/menu_button_lime_unpressed.png" type="Texture" id=27]
+[ext_resource path="res://Assets/menu_button_lime_pressed.png" type="Texture" id=28]
 
 [sub_resource type="DynamicFont" id=1]
 size = 50
@@ -69,6 +71,18 @@ font_data = ExtResource( 3 )
 [sub_resource type="DynamicFont" id=12]
 size = 20
 outline_size = 2
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=17]
+size = 25
+outline_size = 2
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=18]
+size = 14
+outline_size = 1
 use_filter = true
 font_data = ExtResource( 3 )
 
@@ -130,9 +144,6 @@ layer = 4
 [node name="PlayMenu" type="Control" parent="CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PlayMenu"]
 anchor_right = 1.0
@@ -229,9 +240,6 @@ margin_top = -232.0
 margin_right = 155.0
 margin_bottom = 99.0
 rect_scale = Vector2( 1.4, 1.4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ModesContainer" type="Control" parent="CanvasLayer/PlayMenu/MiddleButtons"]
 margin_left = 134.0
@@ -494,6 +502,50 @@ custom_fonts/font = SubResource( 12 )
 text = "Coming soon..."
 align = 1
 valign = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PlayMenu/MiddleButtons"]
+margin_top = 340.0
+margin_right = 518.0
+margin_bottom = 365.0
+rect_min_size = Vector2( 0, 25 )
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/PlayMenu/MiddleButtons"]
+margin_top = 369.0
+margin_right = 518.0
+margin_bottom = 479.0
+alignment = 1
+
+[node name="Tutorial" type="TextureButton" parent="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer2"]
+unique_name_in_owner = true
+margin_left = 175.0
+margin_right = 342.0
+margin_bottom = 110.0
+rect_min_size = Vector2( 167, 110 )
+texture_normal = ExtResource( 27 )
+texture_pressed = ExtResource( 28 )
+expand = true
+script = ExtResource( 16 )
+priority = 10
+
+[node name="Label" type="Label" parent="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer2/Tutorial"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 17 )
+text = "TUTORIAL"
+align = 1
+valign = 1
+
+[node name="Description" type="Label" parent="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer2/Tutorial"]
+anchor_top = 0.8
+anchor_right = 1.0
+anchor_bottom = 0.8
+margin_top = -19.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 18 )
+text = "Learn how to play!"
+align = 1
+valign = 1
 
 [node name="FriendsMenu" type="Control" parent="CanvasLayer/PlayMenu"]
 anchor_right = 1.0
@@ -812,6 +864,9 @@ script = ExtResource( 21 )
 [connection signal="button_left_area" from="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Custom" to="." method="_on_Custom_button_left_area"]
 [connection signal="button_pressed" from="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Custom" to="." method="_on_Custom_button_pressed"]
 [connection signal="button_released" from="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer/Custom" to="." method="_on_Custom_button_released"]
+[connection signal="button_left_area" from="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer2/Tutorial" to="." method="_on_Tutorial_button_left_area"]
+[connection signal="button_pressed" from="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer2/Tutorial" to="." method="_on_Tutorial_button_pressed"]
+[connection signal="button_released" from="CanvasLayer/PlayMenu/MiddleButtons/HBoxContainer2/Tutorial" to="." method="_on_Tutorial_button_released"]
 [connection signal="button_released" from="CanvasLayer/PlayMenu/FriendsMenu/Container/FriendButton" to="." method="_on_FriendButton_button_released"]
 [connection signal="confirmed" from="CanvasLayer2/ErrorText" to="." method="_on_ErrorText_confirmed"]
 [connection signal="custom_action" from="CanvasLayer2/ErrorText" to="." method="_on_ErrorText_custom_action"]

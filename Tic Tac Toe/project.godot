@@ -112,6 +112,8 @@ _global_script_class_icons={
 
 config/name="Tic Tac Toe"
 run/main_scene="res://Menus/BootScreen/BootScreen.tscn"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="BetterTicTacToe"
 boot_splash/image="res://Assets/transparent_1x1.png"
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"

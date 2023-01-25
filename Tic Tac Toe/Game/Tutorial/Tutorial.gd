@@ -1,12 +1,16 @@
 extends Node
 
+"""
+This Tutorial script is a copy of the GameContainer script, except it ignores all network related calls and procedures.
+"""
+
 signal cell_click
 signal release_right_click
 signal game_button_click
 
-enum {O, X, Expansion, Empty}
+enum {O, X, Expansion, Empty, IDLE}
 
-onready var GameServer := $"/root/Network/GameServer"
+onready var tutorial_box: ColorRect = $TutorialBox
 
 var map := {} #cell (Vector2), tile (Tile)
 var turn: int = X
@@ -18,15 +22,17 @@ var x_expansions := 2
 var o_expansions := 2
 var made_any_move := false
 
-var opponent_name: String
+var game_button_allowed: bool
 
-"""
-Visual information variables:
-	Will be used to update the Game scene with data such as outlines, tiles and text when loaded and hosting the game that the game container belongs to.
-	The Game scene is the "visual representation" of the GameContainer. There can be multiple GameContainers, only one Game scene.
-"""
 
-var outline_center_cells := [] #Contains ALL center cells (Vector2) that define outlines for this specific gamer container
+
+
+#Visual information variables:
+#	Will be used to update the Game scene with data such as outlines, tiles and text when loaded and hosting the game that the game container belongs to.
+#	The Game scene is the "visual representation" of the GameContainer. There can be multiple GameContainers, only one Game scene.
+
+
+var outline_center_cells := [] #Contains ALL center cells (Vector2) that define outlines for this specific game container
 var top_text: String = ""
 var bottom_text: String = "X: " + str(x_expansions) + "\nO: " + str(o_expansions)
 var game_button_text: String = "..."
@@ -36,46 +42,157 @@ var bottom_timer_text: String = ""
 var opponent_name_text: String = ""
 
 
-func confirm_connection() -> void:
-	rpc_id(1, "confirm_connection")
+#Specific to tutorial:
 
-remote func send_game_data(data: Dictionary) -> void:
-	Logger.log("Sending game data to server: " + str(data) + ".")
-	rpc_id(1, "receive_game_data", data)
+var started := false
+var progress := 1
+var maps := {} #progress(int): map
+
+#Checked in game.gd:
+var game_button_usage_allowed: bool
+var expansion_button_usage_allowed: bool
+var expansions_allowed: bool
+var tile_placement_allowed: bool
+
+func start() -> void:
+	tutorial_box.visible = true
+	tutorial_box.set_progress(1)
+	mark = X
+	visual_set_text("opponent_name", "Tutorial\nYou're X")
+	visual_set_text("top_text", "X TURN")
+	visual_set_text("game_button_text", "...")
+	$TutorialBox.visible = true
+	started = true
 	
-remote func receive_game_data(data: Dictionary) -> void:
-	Logger.log("Received game data from server: " + str(data) + ".")
-	if (data.has("server_mark")):
-		set_mark(data["server_mark"])
-	if (data.has("server_turn")):
-		set_turn(data["server_turn"])
-	if (data.has("server_tile")):
-		AudioPlayer.play_sound("place")
-		set_tile(data["server_tile"][0], data["server_tile"][1]) #Cell, Mark
-	if (data.has("server_expansion")):
-		AudioPlayer.play_sound("expansion")
-		set_expansion(data["server_expansion"])
-	if (data.has("server_add_expansions")):
-		add_expansions(data["server_add_expansions"][0], data["server_add_expansions"][1]) #No. of Expansions, Mark
-	if (data.has("server_timer1")):
-		set_timer1(data["server_timer1"])
-	if (data.has("server_timer2")):
-		set_timer2(data["server_timer2"])
-	if (data.has("server_winner")):
-		game_ended = true
-		winner_mark = data["server_winner"]
-		victory()
+
+func on_tutorial_progressed(new_progress: int) -> void:
+	if (new_progress >= progress):
+		maps[new_progress] = map.duplicate()
+	else:
+		map = maps[new_progress].duplicate()
+		redraw_grid()
+	progress = new_progress
+	match progress:
+		1:
+			$Timer1.start(300)
+			$Timer2.start(300)
+			$Timer1.set_paused(true)
+			$Timer2.set_paused(true)			
+			turn = IDLE
+			visual_set_text("game_button_text", "...")
+		2:
+			tutorial_box.set_next_visible(false)
+			$Timer1.start(300)
+			$Timer1.set_paused(false)	
+			set_turn(X)
+			game_button_usage_allowed = false
+			expansion_button_usage_allowed = false
+			expansions_allowed = false
+			made_any_move = false
+			tile_placement_allowed = true
+		3:
+			made_any_move = true
+			visual_set_text("game_button_text", "End\nTurn")			
+			tutorial_box.set_next_visible(false)
+			game_button_usage_allowed = true
+		4:
+			$Timer1.set_paused(true)	
+			$Timer2.set_paused(false)							
+			if (map[Vector2(1,1)].id != Empty):
+				place_tile(Vector2(0, 0), O)
+			else:
+				place_tile(Vector2(1, 1), O)
+			AudioPlayer.play_sound("place")
+			set_turn(X)
+			$Timer1.set_paused(false)	
+			$Timer2.set_paused(true)	
+			game_button_usage_allowed = false
+			tile_placement_allowed = false
+		5:
+			tutorial_box.set_next_visible(false)
+			expansion_button_usage_allowed = true
+		6:
+			x_expansions = 2
+			expansions = 2
+			visual_set_text("game_button_text", "Skip\nTurn")
+			made_any_move = false
+			tile_placement_allowed = false
+			game_button_usage_allowed = false
+			visual_update_expansion_button()	
+			tutorial_box.set_next_visible(false)			
+			expansions_allowed = true
+			visual_set_text("bottom_text", "X: " + str(x_expansions) + "\nO: " + str(o_expansions))			
+		7:
+			$Timer1.set_paused(false)	
+			$Timer2.set_paused(true)
+			made_any_move = true
+			turn = X
+			visual_set_text("top_text", "X TURN")
+			visual_set_text("game_button_text", "End\nTurn")			
+			tutorial_box.set_next_visible(false)			
+			expansions_allowed = false
+			game_button_usage_allowed = true
+		8:
+			$Timer1.set_paused(true)	
+			$Timer2.set_paused(false)
+		9:
+			$Timer1.set_paused(true)	
+			$Timer2.set_paused(false)
+			expansions_allowed = false
+			tile_placement_allowed = false
+			o_expansions = 2
+			x_expansions = 1
+			visual_set_text("bottom_text", "X: " + str(x_expansions) + "\nO: " + str(o_expansions))
+			visual_set_text("game_button_text", "...")					
+		10:
+			$Timer1.set_paused(false)	
+			$Timer2.set_paused(true)
+			tutorial_box.set_next_visible(false)						
+			game_button_usage_allowed = false
+			tile_placement_allowed = true
+			expansions_allowed = true
+			made_any_move = false
+			AudioPlayer.play_sound("skip_turn")
+			expansions = 3
+			o_expansions = 3
+			end_turn()
+			x_expansions = 3
+			expansions = 3
+			turn = X
+			visual_set_text("top_text", "X TURN")			
+			visual_set_text("bottom_text", "X: " + str(x_expansions) + "\nO: " + str(o_expansions))			
+			visual_set_text("game_button_text", "Skip\nTurn")
+			visual_update_expansion_button()			
+		11:
+			$Timer1.set_paused(true)	
+			$Timer2.set_paused(false)
+		15:
+			$Timer1.set_paused(true)	
+			$Timer2.set_paused(false)
+			x_expansions = 0
+			visual_set_text("bottom_text", "X: " + str(x_expansions) + "\nO: " + str(o_expansions))
+			visual_update_expansion_button()					
+		16:
+			$Timer1.set_paused(true)	
+			$Timer2.set_paused(true)
+			end_turn()
+			visual_set_text("game_button_text", "Skip\nTurn")			
+			AudioPlayer.play_sound("skip_turn")			
+			x_expansions = 99
+			expansions = 99
+			visual_set_text("bottom_text", "X: " + str(x_expansions) + "\nO: " + str(o_expansions))			
+			visual_update_expansion_button()	
+	
 
 """
 Visual information update methods:
 """
 func _process(delta: float) -> void:
 	#TODO: Optimize this to maybe not update it 60 times a second, especially if >60s
-	if (game_ended):
+	if (game_ended || !started):
 		return
 	visual_set_timer("timer1", $Timer1.time_left)
 	visual_set_timer("timer2", $Timer2.time_left)
-
 func visual_add_outline(center_cell: Vector2) -> void:
 	if (Scenes.current_scene.name == "Game" and Scenes.Game.has_node("Main/Camera/Grid/Outline")):
 		var Outline: Node = Scenes.Game.get_node("Main/Camera/Grid/Outline")
@@ -111,8 +228,7 @@ func visual_set_text(node_name: String, value: String) -> void:
 		if (Scenes.current_scene.name == "Game" and Scenes.Game.has_node("GUI/GUI/OpponentName")):						
 			var opponent_name_text_node: Node = Scenes.Game.get_node("GUI/GUI/OpponentName")
 			opponent_name_text_node.text = value
-		opponent_name_text = value
-		
+		opponent_name_text = value		
 func visual_set_timer(timer_name: String, seconds: float):
 	var timer_text: String = "%02d:%02d" % [int(seconds)/60, int(seconds)%60]
 	#timer1 - X, timer2 - O
@@ -126,7 +242,6 @@ func visual_set_timer(timer_name: String, seconds: float):
 			var bottom_timer_text_node: Node = Scenes.Game.get_node("GUI/GUI/Timers/BottomTimer/TextureRect/TimeIndicator")
 			bottom_timer_text_node.text = timer_text
 		bottom_timer_text = timer_text
-
 func visual_update_expansion_button() -> void:
 	var your_expansions: int = x_expansions
 	if (mark == O):
@@ -142,82 +257,20 @@ func visual_update_expansion_button() -> void:
 			"expansion":
 				tile_texture_node.region_rect.position = Vector2(1, 130)
 				visual_set_text("expansion_button_text", "EXPANDING\n" + str(your_expansions) + " available")
+				
+	if (progress == 5):
+		tutorial_box.set_progress(6)
 
-"""
-Server methods:
-	These are meant to be used only from the receive_game_data method
-"""
-func set_mark(receieved_mark: int) -> void:
-	mark = receieved_mark
-	var mark_string := "X"
-	if (mark == O):
-		mark_string = "O"
-	visual_set_text("opponent_name", "Opponent: " + opponent_name + "\nYou're " + mark_string)
-	
-func set_turn(receieved_turn: int) -> void:
-	turn = receieved_turn
-	if (turn == X):
-		visual_set_text("top_text", "X TURN")
-	else:
-		visual_set_text("top_text", "O TURN")
-	if (turn == mark):
-		visual_set_text("game_button_text", "Skip\nTurn")
-		AudioPlayer.play_sound("your_turn")
-	else:
-		visual_set_text("game_button_text", "...")
-
-func set_tile(cell: Vector2, mark: int) -> void:
-	place_tile(cell, mark, false, true)
-	
-func set_expansion(receieved_expansion_data: Dictionary) -> void:
-	for tile_position in receieved_expansion_data:
-		var tile = Tile.from_dictionary(receieved_expansion_data[tile_position])
-		place_tile(tile_position, tile.id, tile.is_center_of_local_grid)
-		if (tile.is_center_of_local_grid):
-			visual_add_outline(tile_position)
-
-func add_expansions(expansions: int, mark: int) -> void:
-	if (mark == X):
-		x_expansions += expansions
-	else:
-		o_expansions += expansions
-	visual_update_expansion_button()
-	visual_set_text("bottom_text", "X: " + str(x_expansions) + "\nO: " + str(o_expansions))
-
-func set_timer1(timer_data: Dictionary) -> void:
-	$Timer1.start(timer_data.seconds)
-	$Timer1.set_paused(timer_data.paused)
-	visual_set_timer("timer1", timer_data.seconds)
-
-func set_timer2(timer_data: Dictionary) -> void:
-	$Timer2.start(timer_data.seconds)
-	$Timer2.set_paused(timer_data.paused)
-	visual_set_timer("timer2", timer_data.seconds)
-	
-func victory() -> void:
-	#If for some reason not connected to game:
-	if (Scenes.current_scene.name != "Game"):
-		Logger.error("Game ended but not connected to it!", Logger.ERROR)
-		return
-	$Timer1.set_paused(true)
-	$Timer2.set_paused(true)
-	if (winner_mark == mark):
-		AudioPlayer.play_sound("win")
-	else:
-		AudioPlayer.play_sound("lose")
-	if (Scenes.Game.has_node("GUI/GUI")):											
-		if (winner_mark == X):
-			Scenes.Game.get_node("GUI/GUI").show_victory_GUI("X")
-		else:
-			Scenes.Game.get_node("GUI/GUI").show_victory_GUI("O")
 """
 Game methods:
 """
 func _ready() -> void:
 	generate_grid_around_center(Vector2(0, 0))
+	maps[1] = map.duplicate()
+	$TutorialBox.visible = false
 
-#Signal-function: cell_clicked. Fired when a cell is clicked.
-func _on_GameContainer_cell_click(clicked_cell: Vector2) -> void:
+#Signal-function: cell_clicked.
+func _on_Tutorial_cell_click(clicked_cell: Vector2) -> void:
 	made_any_move = true
 	place_tile(clicked_cell, mark, false, true)
 	AudioPlayer.play_sound("place")
@@ -225,15 +278,11 @@ func _on_GameContainer_cell_click(clicked_cell: Vector2) -> void:
 	if (expansions == 0):
 		AudioPlayer.play_sound("end_turn")
 		end_turn()
-		server_data["end_turn"] = true
 	else:
 		visual_set_text("game_button_text", "End\nTurn")
-	send_game_data(server_data)
 
-#Signal-function: cell_clicked. Fired when right click is released.
-func _on_GameContainer_release_right_click(expansion_data: Dictionary) -> void:
-	var server_data = {}
-	server_data["expansion"] = expansion_data
+#Signal-function: cell_clicked.
+func _on_Tutorial_release_right_click(expansion_data: Dictionary) -> void:
 	made_any_move = true
 	expansions -= 1
 	if (turn == X):
@@ -242,21 +291,19 @@ func _on_GameContainer_release_right_click(expansion_data: Dictionary) -> void:
 		o_expansions -= 1
 	if (expansions == 0):
 		end_turn()
-		server_data["end_turn"] = true
 	else:
 		visual_set_text("game_button_text", "End\nTurn")
 	visual_update_expansion_button()
 	visual_set_text("bottom_text", "X: " + str(x_expansions) + "\nO: " + str(o_expansions))
 	AudioPlayer.play_sound("expansion")
-	send_game_data(server_data)
+	if (progress == 6):
+		tutorial_box.set_progress(7)
 	
-#Signal-function: game_button_click. Fired when the game button is clicked
-func _on_GameContainer_game_button_click() -> void:
-	var server_data = {}
+#Signal-function: game_button_click.
+func _on_Tutorial_game_button_click() -> void:
 	#End Turn:
 	if (made_any_move):
 		end_turn()
-		server_data["end_turn"] = true
 		AudioPlayer.play_sound("end_turn")
 	#Skip Turn:
 	else:
@@ -268,9 +315,7 @@ func _on_GameContainer_game_button_click() -> void:
 		else:
 			o_expansions += 1
 		end_turn()
-		server_data["skip_turn"] = true
 		AudioPlayer.play_sound("skip_turn")
-	send_game_data(server_data)
 	
 #Places a tile and adds it to the map
 func place_tile(pos: Vector2, id: int, is_center_of_local_grid: bool = false, check_for_victory: bool = false) -> void:
@@ -283,10 +328,11 @@ func place_tile(pos: Vector2, id: int, is_center_of_local_grid: bool = false, ch
 	map[pos] = tile
 	if (Scenes.current_scene.name == "Game"):
 		Scenes.Game.expansion_data[pos] = tile.to_dictionary() #If the tile is part of an expansion, it will be used in expansion_data, if it is not, this line can be safely ignored.
-#	if (Game_ != null && Game_.get_ref()): #If the Game_ object exists and the Game scene is loaded:
-#		Game_.get_ref().expansion_data[pos] = tile.to_dictionary() #If the tile is part of an expansion, it will be used in expansion_data, if it is not, this line can be safely ignored.
 	if (check_for_victory):
 		check_for_victory(pos, id)
+		
+	if (progress == 2):
+		tutorial_box.set_progress(3)
 
 #Places tiles using a given dictionary where the keys are positions of the tiles and the values are the tiles themselves.
 func place_tiles(tiles: Dictionary):
@@ -309,6 +355,13 @@ func end_turn() -> void:
 	Scenes.Game.cell_selection_mode = "tile"
 	visual_update_expansion_button()
 	visual_set_text("bottom_text", "X: " + str(x_expansions) + "\nO: " + str(o_expansions))
+	
+	if (progress == 3):
+		tutorial_box.set_progress(4)
+	if (progress == 7):
+		tutorial_box.set_progress(8)
+	if (progress == 10 and expansions == 0):
+		tutorial_box.set_progress(11)
 
 #Generates a grid around a center tile. This accounts for already placed tiles.
 func generate_grid_around_center(center: Vector2):
@@ -383,9 +436,59 @@ func check_for_victory(tile_pos: Vector2, tile_id: int) -> void:
 	if (no_empty_cells_left()):
 		game_ended = true
 
+#WARNING: This will take time if the map size is large. Should only be used on small map sizes.
+func redraw_grid() -> void:
+	#Reset map:
+	var Outline: Node = Scenes.Game.get_node("Main/Camera/Grid/Outline")
+	Outline.all_outlines = []
+	Outline.update()
+	var Tiles: Node = Scenes.Game.get_node("Main/Camera/Grid/Tiles")
+	Tiles.clear()
+	
+	for cell in map:
+		visual_add_tile({"x": cell.x, "y": cell.y, "id": map[cell].id})
+		if (map[cell].is_center_of_local_grid):
+			visual_add_outline(cell)
+	
+func _on_Timer1_timeout():
+	pass # Replace with function body.
 
-func _on_Timer1_timeout() -> void:
-	game_ended = true
 
-func _on_Timer2_timeout() -> void:
-	game_ended = true
+func _on_Timer2_timeout():
+	pass # Replace with function body.
+
+"""
+Tutorial methods:
+	These are meant to be used for when the game's state needs to change for the tutorial
+"""
+
+	
+func set_turn(receieved_turn: int) -> void:
+	turn = receieved_turn
+	if (turn == X):
+		visual_set_text("top_text", "X TURN")
+	else:
+		visual_set_text("top_text", "O TURN")
+	if (turn == mark):
+		visual_set_text("game_button_text", "Skip\nTurn")
+		AudioPlayer.play_sound("your_turn")
+	else:
+		visual_set_text("game_button_text", "...")
+
+func set_tile(cell: Vector2, mark: int) -> void:
+	place_tile(cell, mark, false, true)
+	
+func set_expansion(receieved_expansion_data: Dictionary) -> void:
+	for tile_position in receieved_expansion_data:
+		var tile = Tile.from_dictionary(receieved_expansion_data[tile_position])
+		place_tile(tile_position, tile.id, tile.is_center_of_local_grid)
+		if (tile.is_center_of_local_grid):
+			visual_add_outline(tile_position)
+
+func add_expansions(expansions: int, mark: int) -> void:
+	if (mark == X):
+		x_expansions += expansions
+	else:
+		o_expansions += expansions
+	visual_update_expansion_button()
+	visual_set_text("bottom_text", "X: " + str(x_expansions) + "\nO: " + str(o_expansions))

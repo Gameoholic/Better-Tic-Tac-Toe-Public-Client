@@ -1,6 +1,6 @@
 extends Node
 
-const version := "0.3.2"
+const version := "0.3.3"
 var latest_version := "" #Will be "" unless there's a newer version available
 #const connection_ip := "127.0.0.1"
 const connection_ip := "78.47.101.58"

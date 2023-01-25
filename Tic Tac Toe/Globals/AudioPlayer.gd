@@ -40,7 +40,6 @@ func _ready() -> void:
 
 #Plays sound and returns audio stream player node name. If the sound has variants and the variant index is not specified, will play a random one.
 func play_sound(sound_name: String, variant_index: int = -1) -> String:
-	print("aaa")
 	var audio_stream_player = AudioStreamPlayer.new()
 	add_child(audio_stream_player)
 	var random_number := randi()
@@ -59,7 +58,5 @@ func play_sound(sound_name: String, variant_index: int = -1) -> String:
 		Logger.error("Couldn't play sound '" + sound_name + "'.", Logger.ALERT)
 		audio_stream_player.queue_free()
 		return ""
-	var t: String =  "audio_" + sound_name + str(random_number)
-	print(t)
 	return "audio_stream_player.name"
 	

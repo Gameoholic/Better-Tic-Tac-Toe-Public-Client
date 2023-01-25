@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Assets/sprites.png" type="Texture" id=1]
 [ext_resource path="res://Game/Grid/TilesPreview.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Game/Main/Game.gd" type="Script" id=6]
 [ext_resource path="res://Game/Grid/Outline.gd" type="Script" id=7]
 [ext_resource path="res://Game/Main/Expansions.gd" type="Script" id=8]
+[ext_resource path="res://Game/Tutorial/Tutorial.tscn" type="PackedScene" id=10]
 
 [sub_resource type="TileSet" id=1]
 0/name = "sprites.png 0"
@@ -116,6 +117,9 @@ script = ExtResource( 2 )
 [node name="Outline" type="Node2D" parent="Main/Camera/Grid"]
 script = ExtResource( 7 )
 
+[node name="Tutorial" parent="Main/Camera" instance=ExtResource( 10 )]
+unique_name_in_owner = true
+
 [node name="GUI" type="CanvasLayer" parent="."]
 
 [node name="GUI" parent="GUI" instance=ExtResource( 3 )]
@@ -152,4 +156,8 @@ __meta__ = {
 [connection signal="button_clicked" from="." to="." method="_on_Game_button_clicked"]
 [connection signal="cell_clicked" from="." to="." method="_on_Game_cell_clicked"]
 [connection signal="cell_right_clicked" from="." to="." method="_on_Game_cell_right_clicked"]
+[connection signal="expansion_button_clicked" from="." to="." method="_on_Game_expansion_button_clicked"]
+[connection signal="cell_click" from="Main/Camera/Tutorial" to="Main/Camera/Tutorial" method="_on_Tutorial_cell_click"]
+[connection signal="game_button_click" from="Main/Camera/Tutorial" to="Main/Camera/Tutorial" method="_on_Tutorial_game_button_click"]
+[connection signal="release_right_click" from="Main/Camera/Tutorial" to="Main/Camera/Tutorial" method="_on_Tutorial_release_right_click"]
 [connection signal="confirmed" from="ErrorCanvas/ErrorText" to="." method="_on_ErrorText_confirmed"]

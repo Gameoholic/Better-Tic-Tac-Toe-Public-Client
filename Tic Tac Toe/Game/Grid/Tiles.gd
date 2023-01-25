@@ -12,7 +12,7 @@ func _unhandled_input(event):
 		else:
 			var clicked_cell: Vector2 = world_to_map(event.position + CameraNode.position)				
 			match Scenes.Game.cell_selection_mode:
-				"tile":
+				"tile":					
 					if (!event.pressed):
 						Scenes.Game.emit_signal("cell_clicked", clicked_cell)
 				"expansion":

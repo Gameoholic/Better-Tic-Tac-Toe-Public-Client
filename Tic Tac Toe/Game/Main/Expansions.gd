@@ -7,12 +7,14 @@ onready var Outline: Node = Scenes.Game.get_node("Main/Camera/Grid/Outline")
 onready var Tiles: Node = Scenes.Game.get_node("Main/Camera/Grid/Tiles")
 onready var TilesPreview: Node = Scenes.Game.get_node("Main/Camera/Grid/TilesPreview")
 onready var CameraNode: Node = Scenes.Game.get_node("Main/Camera")
-	
+
+var game_container_node: Node #Is either game_container_node or $Tutorial
+
 #Returns whether the tile exists and is a center
 func check_tile_for_center(pos: Vector2) -> bool:
-	if (!GameServer.game_container.map.has(pos)):
+	if (!game_container_node.map.has(pos)):
 		return false
-	if (GameServer.game_container.map[pos].is_center_of_local_grid):
+	if (game_container_node.map[pos].is_center_of_local_grid):
 		return true
 	return false
 	
@@ -27,7 +29,7 @@ func get_generated_grid_tiles(center: Vector2) -> Dictionary:
 	for i in range(-1 + center.x, 2 + center.x, 1):
 		for j in range(-1 + center.y, 2 + center.y, 1):
 			var pos = Vector2(i, j)
-			if (!GameServer.game_container.map.has(pos)):
+			if (!game_container_node.map.has(pos)):
 				var tile: Tile
 				#If the tile is in the center of the new grid:
 				if (pos == center):
@@ -48,7 +50,7 @@ func get_possible_expansions(expansion_pos: Vector2) -> Dictionary:
 	var adjacent_center_directions: Array = get_adjacent_center_tiles(expansion_pos)
 	
 	#If the expansion is in the center of a grid:
-	if (GameServer.game_container.map.has(expansion_pos) and GameServer.game_container.map[expansion_pos].is_center_of_local_grid):
+	if (game_container_node.map.has(expansion_pos) and game_container_node.map[expansion_pos].is_center_of_local_grid):
 		possible_expansions["Center"] = {}
 	
 	for adjacent_center_direction in adjacent_center_directions:
@@ -100,12 +102,12 @@ func get_adjacent_center_tiles(pos: Vector2) -> Array:
 #Runs when player releases right click on a cell
 func place_expansion() -> void:
 	Scenes.Game.in_expansion_selection = false
-	GameServer.game_container.place_tile(Scenes.Game.origin_expansion_cell, Expansion)
-	GameServer.game_container.place_tiles(Scenes.Game.possible_expansions[Scenes.Game.current_expansion_direction])
+	game_container_node.place_tile(Scenes.Game.origin_expansion_cell, Expansion)
+	game_container_node.place_tiles(Scenes.Game.possible_expansions[Scenes.Game.current_expansion_direction])
 
 	for possible_expansion_cell in Scenes.Game.possible_expansions[Scenes.Game.current_expansion_direction]:
 		if (Scenes.Game.possible_expansions[Scenes.Game.current_expansion_direction][possible_expansion_cell].is_center_of_local_grid):
-			GameServer.game_container.visual_add_outline(possible_expansion_cell)
+			game_container_node.visual_add_outline(possible_expansion_cell)
 	
 	var cancel_button: NinePatchRect = Scenes.Game.get_node("GUI/GUI/CancelDisplay")
 	cancel_button.visible = false

@@ -425,3 +425,25 @@ func _on_Proceed_button_released():
 func _on_Proceed_button_left_area():
 	$"%NewPasswordContainer".get_node("Proceed/Label").rect_position.y = 0
 
+
+
+func _on_Tutorial_button_pressed():
+	var label: Label = $"%Tutorial".get_node("Label")
+	var label2: Label = $"%Tutorial".get_node("Description")
+	label.rect_position.y = 0 + 12
+	label2.rect_position.y = 69 + 12
+
+func _on_Tutorial_button_released():
+	var label: Label = $"%Tutorial".get_node("Label")
+	var label2: Label = $"%Tutorial".get_node("Description")
+	label.rect_position.y = 0
+	label2.rect_position.y = 69
+	Scenes.change_scene(Scenes.Game_path, {"tutorial": true})
+
+
+func _on_Tutorial_button_left_area():
+	var label: Label = $"%Tutorial".get_node("Label")
+	var label2: Label = $"%Tutorial".get_node("Description")
+	label.rect_position.y = 0
+	label2.rect_position.y = 69
+	
